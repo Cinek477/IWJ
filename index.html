@@ -1,0 +1,970 @@
+<title>IWJ – Zeszyt Wymagań</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;600;700&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: czysta, jasna aplikacja do nauki – kolumna ~760px, sekcje jako miękkie karty z kolorowym numerem rozdziału, ilustracje na delikatnym tle, akcent fioletowo-niebieski + ciepły żółty zakreślacz */
+:root{
+  --bg:#f5f6fb; --card:#ffffff; --ink:#1b1d36; --muted:#646a8a; --line:#e4e6f2;
+  --acc:#5b4ff5; --acc-2:#9b5cf6; --acc-soft:#eeecff; --hl:#ffd84d; --hl-soft:#fff7d6;
+  --ok:#159a5c; --ok-soft:#e1f6ea; --bad:#e0453a; --bad-soft:#fde7e5; --fig:#f8f8fe;
+  --shadow:0 1px 2px rgba(27,29,54,.04),0 8px 24px rgba(27,29,54,.06);
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1020; --card:#181a2e; --ink:#eceefe; --muted:#a2a6c6; --line:#2a2d48;
+  --acc:#8f86ff; --acc-2:#c39bff; --acc-soft:#25234a; --hl:#f2c94c; --hl-soft:#2e2a1a;
+  --ok:#4fd18e; --ok-soft:#14301f; --bad:#ff7d72; --bad-soft:#3a1c1a; --fig:#14162a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1020; --card:#181a2e; --ink:#eceefe; --muted:#a2a6c6; --line:#2a2d48;
+  --acc:#8f86ff; --acc-2:#c39bff; --acc-soft:#25234a; --hl:#f2c94c; --hl-soft:#2e2a1a;
+  --ok:#4fd18e; --ok-soft:#14301f; --bad:#ff7d72; --bad-soft:#3a1c1a; --fig:#14162a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.65}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 72px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:12px}
+.logo{font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo span{display:inline-grid;place-items:center;background:linear-gradient(135deg,var(--acc),var(--acc-2));color:#fff;border-radius:10px;padding:2px 9px;font-size:16px}
+.theme{flex:none;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);display:grid;place-items:center}
+.theme svg path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.theme .moon{display:none}.is-dark .theme .moon{display:block}.is-dark .theme .sun{display:none}
+nav{display:flex;gap:4px;margin-left:auto;background:var(--bg);padding:4px;border-radius:12px;border:1px solid var(--line)}
+nav a{font-weight:600;font-size:15px;text-decoration:none;color:var(--muted);padding:6px 14px;border-radius:9px}
+nav a[aria-current="page"]{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+nav a:focus-visible,button:focus-visible,.opt:focus-visible,.fcard:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;letter-spacing:-.02em}
+h1{font-size:clamp(34px,6vw,54px);font-weight:800;margin:48px 0 10px;background:linear-gradient(120deg,var(--ink) 30%,var(--acc) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+#view-notatki>h2{font-size:15px;font-family:var(--f-body);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:0 0 12px}
+section.note h2{padding-right:56px;font-size:26px;font-weight:800;margin:0 0 14px}
+h3{font-size:18px;margin:26px 0 8px}
+.lead{color:var(--muted);font-size:18px;max-width:60ch;margin:0 0 28px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 36px;padding:0;list-style:none}
+.toc a{font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:999px;transition:border-color .15s,color .15s}
+.toc a:hover{border-color:var(--acc);color:var(--acc)}
+section.note{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px clamp(18px,4.5vw,40px);margin:0 0 24px;position:relative;box-shadow:var(--shadow)}
+section.note .num{position:absolute;top:22px;right:22px;font-family:var(--f-display);font-weight:800;font-size:13px;color:var(--acc);background:var(--acc-soft);padding:3px 10px;border-radius:999px}
+section.note p,section.note li{max-width:66ch}
+section.note ul,section.note ol{padding-left:1.2em}
+section.note li{margin:4px 0}
+section.note li::marker{color:var(--acc)}
+mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 2px}
+.fig{margin:22px 0;overflow-x:auto;background:var(--fig);border:1px solid var(--line);border-radius:16px;padding:18px 14px 12px}
+.fig svg{display:block;width:100%;max-width:600px;height:auto;margin:0 auto}
+.fig figcaption{font-family:var(--f-hand);font-size:22px;color:var(--muted);text-align:center;margin-top:6px}
+.mem{display:flex;gap:14px;align-items:center;background:var(--hl-soft);border-radius:16px;padding:14px 18px;margin:20px 0}
+.mem svg{flex:none;width:58px;height:36px}
+.mem div{min-width:0}
+.mem b{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mem .hand{font-family:var(--f-hand);font-size:25px;line-height:1.25}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:15px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tbl{overflow-x:auto;margin:12px 0}
+th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+tr:last-child td,tr:last-child th{border-bottom:none}
+th{background:var(--acc-soft);font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.two>*{min-width:0}
+.two .fig{margin:0}
+@media (max-width:640px){.two{grid-template-columns:1fr}}
+.pill{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--acc-soft);color:var(--acc);margin:2px 2px 2px 0}
+dl.gloss{display:grid;grid-template-columns:minmax(120px,210px) 1fr;margin:0}
+dl.gloss dt,dl.gloss dd{margin:0;padding:10px 6px;border-bottom:1px solid var(--line)}
+dl.gloss dt{font-weight:700;color:var(--acc)}
+@media (max-width:560px){dl.gloss{grid-template-columns:1fr}dl.gloss dt{border-bottom:none;padding-bottom:0}}
+
+/* SVG tokens */
+.s{stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sa{stroke:var(--acc);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sb{stroke:var(--bad);stroke-width:2.4;fill:none;stroke-linecap:round}
+.fc{fill:var(--card)} .fh{fill:var(--hl)} .fa{fill:var(--acc-soft)} .fi{fill:var(--ink)} .facc{fill:var(--acc)} .fok{fill:var(--ok-soft)} .fbad{fill:var(--bad-soft)}
+svg text{fill:var(--ink);font-family:var(--f-body);font-size:13px}
+svg .t-hand{font-family:var(--f-hand);font-size:20px}
+svg .t-b{font-weight:700}
+svg .t-acc{fill:var(--acc)} svg .t-bad{fill:var(--bad)} svg .t-mut{fill:var(--muted)}
+svg .t-dark{fill:#1b1d36}
+
+/* QUIZ */
+.qbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 20px}
+button{font:inherit;cursor:pointer}
+.btn{font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:12px;transition:border-color .15s,transform .1s}
+.btn:hover:not(:disabled){border-color:var(--acc)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc-2));color:#fff;border-color:transparent;box-shadow:0 6px 16px color-mix(in srgb,var(--acc) 30%,transparent)}
+.btn:disabled{opacity:.45;cursor:default}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin:0 0 18px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc-2));transition:width .3s}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px clamp(18px,4.5vw,36px);box-shadow:var(--shadow)}
+.qmeta{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--muted);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.qtext{font-family:var(--f-display);font-size:21px;font-weight:600;line-height:1.35;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:13px 15px;border-radius:14px;display:flex;gap:12px;align-items:flex-start;line-height:1.5;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt .k{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted);margin-top:1px}
+.opt.sel{border-color:var(--acc);background:var(--acc-soft)}
+.opt.sel .k{background:var(--acc);color:#fff;border-color:var(--acc)}
+.opt.good{border-color:var(--ok);background:var(--ok-soft)}
+.opt.good .k{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.why{margin-top:18px;padding:14px 16px;background:var(--acc-soft);border-radius:14px}
+.why .verdict{font-weight:700}
+.qnav{display:flex;justify-content:flex-end;margin-top:18px}
+.result{text-align:center}
+.score{font-family:var(--f-display);font-weight:800;font-size:76px;line-height:1;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--acc),var(--acc-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.review{text-align:left;margin-top:22px;display:grid;gap:10px}
+.review div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px}
+.review .x{border-left:4px solid var(--bad)}
+.fcard{perspective:1000px;cursor:pointer;min-height:240px}
+.fcard .in{position:relative;min-height:240px;transition:transform .5s;transform-style:preserve-3d}
+.fcard.flip .in{transform:rotateY(180deg)}
+.fcard .face{position:absolute;inset:0;backface-visibility:hidden;display:grid;place-items:center;text-align:center;padding:28px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow);font-size:18px}
+.fcard .back{transform:rotateY(180deg);background:var(--hl-soft)}
+.fcard .front{font-family:var(--f-display);font-size:30px;font-weight:800;background:linear-gradient(135deg,var(--acc-soft),var(--card))}
+.hint{font-family:var(--f-hand);font-size:21px;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="logo"><span>IWJ</span> Zeszyt wymagań</div>
+  <nav>
+    <a href="#notatki" id="nav-notatki">Notatki</a>
+    <a href="#quiz" id="nav-quiz">Quiz</a>
+  </nav>
+  <button class="theme" id="themeBtn" type="button" aria-label="Przełącz motyw jasny/ciemny"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path class="sun" d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/><path class="moon" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+</div></header>
+
+<!-- ===================== NOTATKI ===================== -->
+<main id="view-notatki" class="wrap">
+  <h1>Inżynieria wymagań i jakości</h1>
+  <p class="lead">Notatki z wykładów z rysunkami do zapamiętania. Patrzysz na obrazek, mózg zapisuje pojęcie. Ramki <mark>„Zapamiętaj”</mark> to skróty na kartkówkę.</p>
+
+  <h2 style="margin-top:8px">Wykład 1 · Wprowadzenie</h2>
+  <p style="margin:-4px 0 12px"><a href="#w2" style="color:var(--acc);font-weight:600">→ przejdź do wykładu 2</a></p>
+  <ul class="toc">
+    <li><a href="#w1-org">Zaliczenie</a></li>
+    <li><a href="#w1-inter">Interesariusze</a></li>
+    <li><a href="#w1-tri">Trójkąt</a></li>
+    <li><a href="#w1-met">Metodyki</a></li>
+    <li><a href="#w1-prog">Programiści</a></li>
+    <li><a href="#w1-pir">Piramida</a></li>
+    <li><a href="#w1-wiz">Wizja</a></li>
+    <li><a href="#w1-tacit">Wiedza ukryta</a></li>
+    <li><a href="#w1-pyt">Pytania</a></li>
+    <li><a href="#w1-gloss">Słowniczek</a></li>
+  </ul>
+
+  <section class="note" id="w1-org"><span class="num">1.1</span>
+    <h2>Organizacja i zaliczenie</h2>
+    <p>Wykłady zdalnie na MS Teams (kanał Ogólny). Laboratoria stacjonarnie, w małych grupach. Materiały i zapisy na UPEL. Prowadzący: Kamil Piątak, Jacek Dajda, Maria Eckes-Kondak, Daria Wójcik.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 520 150" role="img" aria-label="Pasek punktów: kartkówki 32, mini-projekt 18, kolokwium 50">
+        <rect x="10" y="40" width="160" height="50" class="s fa"/><text x="90" y="62" text-anchor="middle" class="t-b">Kartkówki</text><text x="90" y="80" text-anchor="middle">4 × 8 = 32 pkt</text>
+        <rect x="170" y="40" width="90" height="50" class="s fh"/><text x="215" y="62" text-anchor="middle" class="t-b t-dark">Projekt</text><text x="215" y="80" text-anchor="middle" class="t-dark">18 pkt</text>
+        <rect x="260" y="40" width="250" height="50" class="s fok"/><text x="385" y="62" text-anchor="middle" class="t-b">Kolokwium</text><text x="385" y="80" text-anchor="middle">50 pkt</text>
+        <path d="M10 110 h250" class="sa"/><text x="135" y="130" text-anchor="middle" class="t-hand t-acc">lab: min. 25 / 50</text>
+        <path d="M260 110 h250" class="sa"/><text x="385" y="130" text-anchor="middle" class="t-hand t-acc">kolos: min. 25 / 50</text>
+        <text x="260" y="26" text-anchor="middle" class="t-hand">obie połówki osobno ≥ 50%</text>
+      </svg>
+    </figure>
+    <ul>
+      <li>Kartkówki na początku laboratoriów 1–4, każda 0–8 pkt, z materiału poprzedniego laboratorium.</li>
+      <li>Mini-projekt robiony między laboratoriami 4 a 6: 0–18 pkt.</li>
+      <li>Kolokwium na koniec: teoria z wykładu i praktyka pisania wymagań, 0–50 pkt.</li>
+      <li>Brak progu: kolokwium poprawkowe i/lub poprawiona praca laboratoryjna.</li>
+    </ul>
+  </section>
+
+  <section class="note" id="w1-inter"><span class="num">1.2</span>
+    <h2>Interesariusze i wyzwania</h2>
+    <p>Przy budowie oprogramowania uczestniczą: <b>Biznes → Klient → Analityk systemowy → Programista</b>. Każde ogniwo przekazuje pomysł dalej i każde go trochę zmienia.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 560 170" role="img" aria-label="Głuchy telefon: koło zamienia się w kwadrat, trójkąt i bazgroł">
+        <g>
+          <circle cx="60" cy="110" r="22" class="s fc"/><path d="M48 150 q12 -18 24 0" class="s"/>
+          <text x="60" y="166" text-anchor="middle" class="t-b">Biznes</text>
+          <path d="M30 20 h70 a10 10 0 0 1 10 10 v30 a10 10 0 0 1 -10 10 h-40 l-10 12 v-12 h-20 a10 10 0 0 1 -10 -10 v-30 a10 10 0 0 1 10 -10z" class="s fc"/>
+          <circle cx="65" cy="45" r="14" class="fh s"/>
+        </g>
+        <path d="M110 110 h40" class="sa"/><path d="M144 104 l8 6 -8 6" class="sa"/>
+        <g transform="translate(140 0)">
+          <circle cx="60" cy="110" r="22" class="s fc"/><path d="M48 150 q12 -18 24 0" class="s"/>
+          <text x="60" y="166" text-anchor="middle" class="t-b">Klient</text>
+          <path d="M30 20 h70 a10 10 0 0 1 10 10 v30 a10 10 0 0 1 -10 10 h-40 l-10 12 v-12 h-20 a10 10 0 0 1 -10 -10 v-30 a10 10 0 0 1 10 -10z" class="s fc"/>
+          <rect x="52" y="32" width="26" height="26" class="fh s"/>
+        </g>
+        <path d="M250 110 h40" class="sa"/><path d="M284 104 l8 6 -8 6" class="sa"/>
+        <g transform="translate(280 0)">
+          <circle cx="60" cy="110" r="22" class="s fc"/><path d="M48 150 q12 -18 24 0" class="s"/>
+          <text x="60" y="166" text-anchor="middle" class="t-b">Analityk</text>
+          <path d="M30 20 h70 a10 10 0 0 1 10 10 v30 a10 10 0 0 1 -10 10 h-40 l-10 12 v-12 h-20 a10 10 0 0 1 -10 -10 v-30 a10 10 0 0 1 10 -10z" class="s fc"/>
+          <path d="M65 30 l15 28 h-30z" class="fh s"/>
+        </g>
+        <path d="M390 110 h40" class="sa"/><path d="M424 104 l8 6 -8 6" class="sa"/>
+        <g transform="translate(420 0)">
+          <circle cx="60" cy="110" r="22" class="s fc"/><path d="M48 150 q12 -18 24 0" class="s"/>
+          <text x="60" y="166" text-anchor="middle" class="t-b">Programista</text>
+          <path d="M30 20 h70 a10 10 0 0 1 10 10 v30 a10 10 0 0 1 -10 10 h-40 l-10 12 v-12 h-20 a10 10 0 0 1 -10 -10 v-30 a10 10 0 0 1 10 -10z" class="s fc"/>
+          <path d="M48 50 q8 -24 16 -4 t16 -6 t8 10" class="sb"/>
+        </g>
+      </svg>
+      <figcaption>głuchy telefon: koło na wejściu, bazgroł na wyjściu</figcaption>
+    </figure>
+    <h3>Na czym polega trudność analizy wymagań?</h3>
+    <ul>
+      <li>Zrozumieć <mark>realne potrzeby</mark> użytkowników.</li>
+      <li>Zidentyfikować <b>problemy</b>, które system ma rozwiązać.</li>
+      <li>Zrozumieć <b>kontekst</b> działania systemu, często obcą branżę lub dziedzinę.</li>
+      <li><b>Komunikacja</b> z klientem i użytkownikiem oraz z zespołem wykonawczym.</li>
+    </ul>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg>
+      <div><b>Zapamiętaj</b><span class="hand">4 wyzwania = P-P-K-K: Potrzeby, Problemy, Kontekst, Komunikacja</span></div></div>
+  </section>
+
+  <section class="note" id="w1-tri"><span class="num">1.3</span>
+    <h2>Trójkąt ograniczeń (iron triangle)</h2>
+    <p>Trzy wierzchołki: <b>wymagania/zakres</b>, <b>koszty/budżet</b>, <b>plan/harmonogram/czas</b>. Zmiana jednego pociąga zmianę pozostałych. Metodyki różnią się tym, <mark>co jest stałe, a co szacowane</mark>.</p>
+    <div class="two">
+      <figure class="fig">
+        <svg viewBox="0 0 280 230" role="img" aria-label="Kaskada: zakres zablokowany na górze, koszt i czas szacowane">
+          <path d="M140 40 L250 200 L30 200 Z" class="s fa"/>
+          <rect x="112" y="10" width="56" height="40" rx="6" class="s fh"/><path d="M126 10 v-6 a14 14 0 0 1 28 0 v6" class="s"/>
+          <text x="140" y="36" text-anchor="middle" class="t-b t-dark">ZAKRES</text>
+          <text x="30" y="222" text-anchor="middle" class="t-b">koszt ?</text>
+          <text x="250" y="222" text-anchor="middle" class="t-b">czas ?</text>
+          <text x="140" y="150" text-anchor="middle" class="t-hand">KASKADA</text>
+        </svg>
+        <figcaption>kaskada: kłódka na zakresie</figcaption>
+      </figure>
+      <figure class="fig">
+        <svg viewBox="0 0 280 230" role="img" aria-label="Agile: odwrócony trójkąt, czas i koszt zablokowane, zakres szacowany">
+          <path d="M30 30 L250 30 L140 190 Z" class="s fok"/>
+          <rect x="2" y="10" width="62" height="40" rx="6" class="s fh"/><text x="33" y="36" text-anchor="middle" class="t-b t-dark">CZAS</text>
+          <rect x="216" y="10" width="62" height="40" rx="6" class="s fh"/><text x="247" y="36" text-anchor="middle" class="t-b t-dark">KOSZT</text>
+          <text x="140" y="214" text-anchor="middle" class="t-b">zakres ?</text>
+          <text x="140" y="90" text-anchor="middle" class="t-hand">AGILE</text>
+        </svg>
+        <figcaption>agile: trójkąt do góry nogami</figcaption>
+      </figure>
+    </div>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg>
+      <div><b>Zapamiętaj</b><span class="hand">Kaskada trzyma CO (zakres). Agile trzyma KIEDY i ZA ILE (czas, koszt).</span></div></div>
+  </section>
+
+  <section class="note" id="w1-met"><span class="num">1.4</span>
+    <h2>Metodyki wytwarzania oprogramowania</h2>
+    <h3>Model kaskadowy (waterfall)</h3>
+    <p>Etapy idą po kolei; następny zaczyna się, gdy poprzedni się skończy. Powrót „pod wodospad” jest drogi.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 600 250" role="img" aria-label="Schody kaskady: planowanie, analiza, projektowanie, implementacja, testowanie, wdrożenie, utrzymanie">
+        <g id="steps">
+          <rect x="10"  y="10"  width="120" height="30" rx="4" class="s fa"/><text x="70"  y="30" text-anchor="middle">1 Planowanie</text>
+          <rect x="90"  y="42"  width="120" height="30" rx="4" class="s fh"/><text x="150" y="62" text-anchor="middle" class="t-b t-dark">2 Analiza</text>
+          <rect x="170" y="74"  width="120" height="30" rx="4" class="s fa"/><text x="230" y="94" text-anchor="middle">3 Projektowanie</text>
+          <rect x="250" y="106" width="120" height="30" rx="4" class="s fa"/><text x="310" y="126" text-anchor="middle">4 Implementacja</text>
+          <rect x="330" y="138" width="120" height="30" rx="4" class="s fa"/><text x="390" y="158" text-anchor="middle">5 Testowanie</text>
+          <rect x="410" y="170" width="120" height="30" rx="4" class="s fa"/><text x="470" y="190" text-anchor="middle">6 Wdrożenie</text>
+          <rect x="470" y="208" width="120" height="30" rx="4" class="s fa"/><text x="530" y="228" text-anchor="middle">7 Utrzymanie</text>
+        </g>
+        <path d="M132 22 q14 4 10 18 M212 56 q14 4 10 18 M292 88 q14 4 10 18 M372 120 q14 4 10 18 M452 152 q14 4 10 18 M532 184 q14 4 10 22" class="sa"/>
+        <text x="84" y="92" class="t-hand t-acc" text-anchor="end">tu jesteśmy my</text>
+        <path d="M88 84 q4 -24 0 0 M88 84 h0" class="sa" style="display:none"/>
+      </svg>
+      <figcaption>woda płynie tylko w dół</figcaption>
+    </figure>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg>
+      <div><b>Zapamiętaj kolejność</b><span class="hand">P-A-P-I-T-W-U: „Pies Ali Pilnuje I Tak Wszystko Ucieka”</span><br>Planowanie, Analiza, Projektowanie, Implementacja, Testowanie, Wdrożenie, Utrzymanie.</div></div>
+
+    <h3>Metody iteracyjne</h3>
+    <p>Np. <b>RUP – Rational Unified Process</b>. Projekt dzieli się na iteracje; w każdej wykonuje się po trochu analizę, projekt, kod i testy.</p>
+
+    <h3>Metody zwinne (Agile)</h3>
+    <div class="two">
+      <ul>
+        <li>Proces <b>iteracyjno-ewolucyjny</b>.</li>
+        <li>Podejście <b>empiryczne</b>: reagujemy na zmianę zamiast trzymać się planu.</li>
+        <li><mark>Stałe terminy, zmienny zakres</mark> wymagań.</li>
+        <li><b>Ścisła współpraca</b> wykonawcy z zamawiającym. Bez niej nie da się precyzować ani walidować wymagań.</li>
+        <li><b>Działające oprogramowanie</b> ważniejsze niż dokumentacja.</li>
+      </ul>
+      <figure class="fig">
+        <svg viewBox="0 0 240 200" role="img" aria-label="Pętla iteracji agile">
+          <circle cx="120" cy="100" r="70" class="s"/>
+          <path d="M184 70 l6 -14 l8 14" class="sa"/>
+          <path d="M56 130 l-6 14 l-8 -14" class="sa"/>
+          <text x="120" y="22" text-anchor="middle" class="t-b">plan</text>
+          <text x="205" y="105" class="t-b">kod</text>
+          <text x="120" y="190" text-anchor="middle" class="t-b">test</text>
+          <text x="2" y="105" class="t-b">demo</text>
+          <text x="120" y="90" text-anchor="middle" class="t-hand">sprint</text>
+          <text x="120" y="122" text-anchor="middle" class="t-hand t-acc">i od nowa</text>
+        </svg>
+        <figcaption>agile kręci się w kółko</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="note" id="w1-prog"><span class="num">1.5</span>
+    <h2>Po co programiście inżynieria wymagań?</h2>
+    <ul>
+      <li>„Przecież powiedz mi dokładnie, co mam zrobić…” – wymagania to <b>wejście</b> pracy programisty. Trzeba je rozumieć i umieć wyłapać w nich błędy.</li>
+      <li>W mniej formalnych procesach klient jest bliżej, a programiści <b>współtworzą</b> wymagania.</li>
+      <li>Kupujesz bibliotekę albo zlecasz outsourcing: <b>sam stajesz się klientem</b>.</li>
+      <li>Własny start-up: trzeba napisać wizję i wymagania.</li>
+      <li>Bez rozumienia wymagań nie da się sprawdzić jakości ani testować.</li>
+    </ul>
+    <h3>Problem „klienta z wizją”</h3>
+    <div class="two">
+      <ul>
+        <li>Ogólne hasła.</li>
+        <li>Nieprzemyślane funkcje.</li>
+        <li>Niedoprecyzowane częste scenariusze.</li>
+        <li><mark>Tylko pozytywne scenariusze</mark>, bez ścieżek błędu.</li>
+      </ul>
+      <figure class="fig">
+        <svg viewBox="0 0 260 180" role="img" aria-label="Koszt błędu rośnie z każdym etapem">
+          <path d="M30 150 h220 M30 150 v-140" class="s"/>
+          <path d="M30 145 C120 140 170 120 240 20" class="sb"/>
+          <circle cx="50" cy="144" r="5" class="facc"/><text x="50" y="168" text-anchor="middle">analiza</text>
+          <circle cx="140" cy="128" r="5" class="facc"/><text x="140" y="168" text-anchor="middle">kod</text>
+          <circle cx="238" cy="24" r="6" class="facc"/><text x="230" y="168" text-anchor="middle">wdrożenie</text>
+          <text x="40" y="22" class="t-hand">koszt błędu</text>
+          <text x="150" y="60" class="t-hand t-bad">auć</text>
+        </svg>
+        <figcaption>im później znajdziesz błąd, tym drożej</figcaption>
+      </figure>
+    </div>
+    <p>Braki koncepcyjne i tak dotrą do zespołu. <b>Im wcześniej je wykryjemy, tym mniej czasu stracimy</b> na programowanie i testowanie.</p>
+  </section>
+
+  <section class="note" id="w1-pir"><span class="num">1.6</span>
+    <h2>Proces analizy: od ogółu do szczegółu</h2>
+    <div class="two">
+      <figure class="fig">
+        <svg viewBox="0 0 260 210" role="img" aria-label="Piramida: potrzeby na górze, funkcje, wymagania na dole">
+          <path d="M130 10 L250 200 L10 200 Z" class="s fc"/>
+          <path d="M130 10 L170 74 L90 74 Z" class="fh"/>
+          <path d="M90 74 h80 M50 137 h160" class="s"/>
+          <text x="130" y="62" text-anchor="middle" class="t-b t-dark">Potrzeby</text>
+          <text x="130" y="112" text-anchor="middle" class="t-b">Funkcje</text>
+          <text x="130" y="175" text-anchor="middle" class="t-b">Wymagania</text>
+          <text x="8" y="40" class="t-hand t-acc">mało, ogólnie</text>
+          <text x="160" y="196" class="t-hand t-acc" text-anchor="end"> </text>
+        </svg>
+        <figcaption>piramida wymagań: na dole najwięcej szczegółów</figcaption>
+      </figure>
+      <figure class="fig">
+        <svg viewBox="0 0 260 210" role="img" aria-label="Lejek: wizja, model funkcjonalny, procesy i scenariusze, interfejs">
+          <path d="M10 10 h240 l-30 46 h-180z" class="s fa"/><text x="130" y="38" text-anchor="middle" class="t-b">1 Wizja produktu</text>
+          <path d="M40 60 h180 l-25 44 h-130z" class="s fa"/><text x="130" y="87" text-anchor="middle">2 Model funkcjonalny</text>
+          <path d="M65 108 h130 l-20 44 h-90z" class="s fa"/><text x="130" y="135" text-anchor="middle">3 Procesy</text>
+          <path d="M85 156 h90 l-15 44 h-60z" class="s fh"/><text x="130" y="183" text-anchor="middle" class="t-dark">4 GUI</text>
+        </svg>
+        <figcaption>lejek: od wizji do ekranów</figcaption>
+      </figure>
+    </div>
+    <ol>
+      <li>Wizja produktu</li>
+      <li>Model funkcjonalny</li>
+      <li>Modelowanie procesów i scenariuszy</li>
+      <li>Projektowanie interfejsu graficznego</li>
+    </ol>
+    <h3>Od czego zacząć projekt?</h3>
+    <div class="two">
+      <div><span class="pill">Start-up</span><p>Co? Dla kogo? Dlaczego?</p></div>
+      <div><span class="pill">Zamówienie od klienta</span><p>„Mam problem, chcę coś usprawnić” · „Inni też takie mają, ja też chcę” · „Chcę spełnić wymogi prawne”</p></div>
+    </div>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg>
+      <div><b>Zapamiętaj</b><span class="hand">PFW jak „pfff, wymagania”: Potrzeby → Funkcje → Wymagania</span></div></div>
+  </section>
+
+  <section class="note" id="w1-wiz"><span class="num">1.7</span>
+    <h2>Wizja produktu</h2>
+    <p>Wizja odpowiada na cztery pytania:</p>
+    <figure class="fig">
+      <svg viewBox="0 0 520 200" role="img" aria-label="Kompas wizji: dziedzina, problem, cel, funkcje">
+        <circle cx="260" cy="100" r="78" class="s fc"/>
+        <path d="M260 30 l12 70 l-12 70 l-12 -70z" class="fh s"/>
+        <path d="M190 100 l70 -10 l70 10 l-70 10z" class="fa s"/>
+        <text x="260" y="18" text-anchor="middle" class="t-b">Dziedzina?</text>
+        <text x="350" y="104" class="t-b">Problem?</text>
+        <text x="260" y="196" text-anchor="middle" class="t-b">Cel?</text>
+        <text x="170" y="104" text-anchor="end" class="t-b">Główne funkcje?</text>
+        <text x="420" y="34" class="t-hand t-acc">kompas</text>
+        <text x="420" y="64" class="t-hand t-acc">projektu</text>
+      </svg>
+    </figure>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg>
+      <div><b>Zapamiętaj</b><span class="hand">D-P-C-F: „Dobry Pomysł Coś Fruwa” – Dziedzina, Problem, Cel, Funkcje</span></div></div>
+
+    <h3>Formy wizji</h3>
+    <div class="two">
+      <div>
+        <p><b>Elevator pitch</b> – opis produktu na czas jazdy windą (ok. 30–60 s): dla kogo, jaki problem, co to jest, główna korzyść, czym różni się od konkurencji.</p>
+        <p><b>Dokument wizji</b> – pełniejszy, pisemny opis.</p>
+      </div>
+      <figure class="fig">
+        <svg viewBox="0 0 220 190" role="img" aria-label="Winda ze stoperem 30 sekund">
+          <rect x="40" y="20" width="120" height="160" class="s fc"/>
+          <path d="M100 20 v160" class="s"/>
+          <rect x="70" y="2" width="60" height="16" rx="3" class="s fh"/><text x="100" y="14" text-anchor="middle" class="t-dark" style="font-size:11px">▲ 7 ▼</text>
+          <circle cx="185" cy="70" r="26" class="s fa"/><path d="M185 70 v-16 M185 70 l10 8" class="s"/><path d="M180 40 h10" class="s"/>
+          <text x="185" y="118" text-anchor="middle" class="t-hand">30 s!</text>
+        </svg>
+        <figcaption>sprzedaj pomysł, zanim drzwi się otworzą</figcaption>
+      </figure>
+    </div>
+    <h3>Pitch deck – 8 elementów</h3>
+    <div class="tbl"><table>
+      <tr><th>1</th><td>Zespół</td><th>5</th><td>Rynek / potencjalni klienci</td></tr>
+      <tr><th>2</th><td>Opis problemu</td><th>6</th><td>Rozwiązania konkurencyjne</td></tr>
+      <tr><th>3</th><td>Korzyści</td><th>7</th><td>Model biznesowy</td></tr>
+      <tr><th>4</th><td>Rozwiązanie i produkt</td><th>8</th><td>Budżet</td></tr>
+    </table></div>
+    <p>Dobre praktyki: <mark>przyjrzyj się konkurencji</mark> i <mark>zidentyfikuj aktorów systemu</mark>.</p>
+
+    <h3>Przykład: monitorowanie jakości powietrza</h3>
+    <div class="tbl"><table>
+      <tr><th>Problem</th><th>Rozwiązanie</th></tr>
+      <tr><td>Brak wystarczającej informacji</td><td>Gęsta infrastruktura czujników</td></tr>
+      <tr><td>Nieefektywne kanały komunikacji z mieszkańcami</td><td>Aplikacja mobilna z ostrzeżeniami</td></tr>
+      <tr><td>Brak możliwości badania zmian jakości</td><td>Aplikacja analityczna</td></tr>
+    </table></div>
+    <p><b>Aktorzy:</b> mieszkańcy miasta; urzędnicy Urzędu Miasta odpowiedzialni za ochronę środowiska.</p>
+
+    <h3>Po co robić wizję?</h3>
+    <ul>
+      <li>Rozumiemy, <b>jakie problemy</b> produkt rozwiązuje, i wiemy, że idziemy w dobrą stronę.</li>
+      <li>Znamy <b>odbiorców i dziedzinę</b>.</li>
+      <li>Wiemy, <b>co jest do zrobienia</b>, i możemy ogólnie zaplanować proces.</li>
+      <li><b>Klient</b> widzi, że go rozumiemy, więc bardziej wierzy w projekt i bardziej się angażuje.</li>
+    </ul>
+  </section>
+
+  <section class="note" id="w1-tacit"><span class="num">1.8</span>
+    <h2>Wiedza ukryta (tacit knowledge)</h2>
+    <div class="two">
+      <div>
+        <p>Pojęcie <b>Michaela Polanyiego</b>: <mark>„możemy wiedzieć więcej, niż możemy powiedzieć”</mark>.</p>
+        <ul>
+          <li>Przekazuje się ją przez wspólną pracę, rozmowę, opowieści i doświadczenia.</li>
+          <li>Trudno ją wyartykułować i zapisać w specyfikacji.</li>
+          <li>Jej posiadacz <b>często nie wie, że ją ma</b>.</li>
+          <li>Przeciwieństwo: <b>wiedza jawna</b> (explicit), czyli to, co da się zapisać.</li>
+        </ul>
+      </div>
+      <figure class="fig">
+        <svg viewBox="0 0 260 230" role="img" aria-label="Góra lodowa: wiedza jawna nad wodą, wiedza ukryta pod wodą">
+          <path d="M0 80 q20 -6 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" class="sa"/>
+          <path d="M100 80 l25 -60 l20 30 l15 30z" class="s fc"/>
+          <path d="M100 80 l-50 80 l40 60 h80 l50 -70 l-60 -70z" class="s fa"/>
+          <text x="130" y="72" text-anchor="middle" style="font-size:11px" class="t-b">jawna</text>
+          <text x="140" y="150" text-anchor="middle" class="t-b">UKRYTA</text>
+          <text x="140" y="180" text-anchor="middle" class="t-hand">„tak się po prostu robi”</text>
+          <text x="190" y="40" class="t-hand t-acc">ok. 10%</text>
+          <text x="196" y="206" class="t-hand t-acc">ok. 90%</text>
+        </svg>
+        <figcaption>klient pokazuje ci tylko czubek</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="note" id="w1-pyt"><span class="num">1.9</span>
+    <h2>Jak rozmawiać z klientem</h2>
+    <figure class="fig">
+      <svg viewBox="0 0 540 190" role="img" aria-label="Pytanie otwarte jako otwarte drzwi, pytanie zamknięte jako przełącznik tak/nie">
+        <rect x="30" y="20" width="100" height="150" class="s fc"/>
+        <path d="M30 20 l60 16 v150 l-60 -16z" class="s fh"/>
+        <circle cx="80" cy="100" r="4" class="fi"/>
+        <path d="M140 60 q30 -10 60 0 M140 100 q30 0 60 0 M140 140 q30 10 60 0" class="sa"/>
+        <text x="110" y="186" text-anchor="middle" class="t-b">OTWARTE</text>
+        <text x="215" y="104" class="t-hand t-acc">eksploracja</text>
+        <rect x="340" y="70" width="140" height="56" rx="28" class="s fc"/>
+        <circle cx="452" cy="98" r="22" class="s fa"/>
+        <text x="372" y="104" text-anchor="middle" class="t-b">TAK</text><text x="452" y="104" text-anchor="middle" class="t-b">NIE</text>
+        <text x="410" y="186" text-anchor="middle" class="t-b">ZAMKNIĘTE</text>
+        <text x="410" y="50" text-anchor="middle" class="t-hand t-acc">doprecyzowanie</text>
+      </svg>
+      <figcaption>otwarte otwierają drzwi, zamknięte przełączają tak/nie</figcaption>
+    </figure>
+    <div class="two">
+      <div>
+        <h3>Pytania otwarte</h3>
+        <p>„W jaki sposób…”, „Co się dzieje, gdy…”, „Jak zachowuje się…”, „Jak ma działać…”. Wydobywają wiedzę ukrytą i służą do <b>eksploracji</b> przestrzeni rozwiązań.</p>
+        <p>✓ „W jaki sposób mają być prezentowane dane?”</p>
+      </div>
+      <div>
+        <h3>Pytania zamknięte</h3>
+        <p>Odpowiedź tak/nie albo wybór z listy. Służą do <b>doprecyzowania</b> wymagań, w późniejszych iteracjach.</p>
+        <p>✗ na start: „Czy dane mają być w tabelce?”</p>
+      </div>
+    </div>
+    <h3>Zasady pierwszych rozmów</h3>
+    <ul>
+      <li>Cel: <b>eksploracja przestrzeni wymagań</b> i wyłapanie potencjalnych problemów.</li>
+      <li>Nie wchodzimy w szczegóły, chyba że są kluczowe. Przyjdzie na nie czas w kolejnych iteracjach.</li>
+      <li>Szczegóły nie mogą zasłaniać całości i celu projektu.</li>
+    </ul>
+    <h3>Przydatne techniki</h3>
+    <p><span class="pill">Lista funkcji</span> <span class="pill">Mind mapa</span> <span class="pill">Mapa funkcji</span> <span class="pill">Rysunek koncepcyjny</span></p>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg>
+      <div><b>Zapamiętaj</b><span class="hand">Najpierw OTWIERAJ (eksploruj), potem ZAMYKAJ (doprecyzuj).</span></div></div>
+  </section>
+
+  <section class="note" id="w1-gloss"><span class="num">1.10</span>
+    <h2>Słowniczek</h2>
+    <dl class="gloss">
+      <dt>Inżynieria wymagań (RE)</dt><dd>Requirements Engineering: pozyskiwanie, analiza, specyfikacja, walidacja i zarządzanie wymaganiami.</dd>
+      <dt>Wymaganie</dt><dd>Opis cechy lub zachowania, które system musi mieć, żeby zaspokoić potrzebę interesariusza.</dd>
+      <dt>Wymaganie funkcjonalne</dt><dd><b>Co</b> system robi (funkcje, reakcje na dane wejściowe).</dd>
+      <dt>Wymaganie niefunkcjonalne</dt><dd><b>Jak</b> system działa: wydajność, bezpieczeństwo, użyteczność, niezawodność.</dd>
+      <dt>Interesariusz</dt><dd>Stakeholder: każdy, na kogo system wpływa lub kto wpływa na system.</dd>
+      <dt>Aktor</dt><dd>Rola (człowiek lub inny system), która wchodzi w interakcję z systemem.</dd>
+      <dt>Analityk systemowy</dt><dd>Pozyskuje i opisuje wymagania; tłumaczy język biznesu na język zespołu.</dd>
+      <dt>Wizja produktu</dt><dd>Dziedzina, problem, cel i główne funkcje produktu.</dd>
+      <dt>Elevator pitch</dt><dd>Prezentacja pomysłu w 30–60 sekund.</dd>
+      <dt>Pitch deck</dt><dd>Zestaw slajdów dla inwestorów lub klientów (8 elementów).</dd>
+      <dt>Iron triangle</dt><dd>Trójkąt ograniczeń: zakres – koszt – czas.</dd>
+      <dt>Waterfall</dt><dd>Model kaskadowy, etapy sekwencyjne.</dd>
+      <dt>RUP</dt><dd>Rational Unified Process: iteracyjna metodyka oparta na UML i przypadkach użycia; fazy: rozpoczęcie, opracowanie, konstrukcja, przejście.</dd>
+      <dt>Agile</dt><dd>Metody zwinne (Scrum, Kanban, XP = eXtreme Programming), oparte na Manifeście Agile.</dd>
+      <dt>Iteracja</dt><dd>Krótki, powtarzalny cykl kończący się działającym przyrostem produktu.</dd>
+      <dt>Walidacja</dt><dd>Czy budujemy <b>właściwy</b> produkt? (zgodność z potrzebami klienta)</dd>
+      <dt>Weryfikacja</dt><dd>Czy budujemy produkt <b>poprawnie</b>? (zgodność ze specyfikacją)</dd>
+      <dt>Outsourcing</dt><dd>Zlecenie pracy firmie zewnętrznej.</dd>
+      <dt>Wiedza ukryta / jawna</dt><dd>Tacit (trudna do wypowiedzenia) / explicit (łatwa do zapisania).</dd>
+      <dt>Mind mapa</dt><dd>Diagram pomysłów rozchodzących się od pojęcia centralnego.</dd>
+      <dt>UI / GUI</dt><dd>(Graphical) User Interface – interfejs (graficzny) użytkownika.</dd>
+      <dt>UPEL</dt><dd>Platforma e-learningowa AGH (Moodle).</dd>
+    </dl>
+    <p style="color:var(--muted);font-size:14px;margin-top:16px">Definicje funkcjonalne/niefunkcjonalne, walidacja/weryfikacja i fazy RUP pochodzą z ogólnej wiedzy o inżynierii wymagań, nie ze slajdów wykładu 1.</p>
+  </section>
+
+  <h2 style="margin-top:48px" id="w2">Wykład 2 · Analiza i specyfikowanie wymagań</h2>
+  <ul class="toc">
+    <li><a href="#w2-po-co">Po co specyfikacja</a></li>
+    <li><a href="#w2-formy">Formy zapisu</a></li>
+    <li><a href="#w2-uc">Diagram UC</a></li>
+    <li><a href="#w2-spec">Specyfikacja UC</a></li>
+    <li><a href="#w2-us">User stories</a></li>
+    <li><a href="#w2-invest">INVEST i epiki</a></li>
+    <li><a href="#w2-persony">Persony</a></li>
+  </ul>
+
+  <section class="note" id="w2-po-co"><span class="num">2.1</span>
+    <h2>Po co specyfikacja wymagań?</h2>
+    <p>Wizja to za mało. Specyfikacja jest potrzebna, bo:</p>
+    <figure class="fig">
+      <svg viewBox="0 0 520 150" role="img" aria-label="Cztery powody: wizja to za mało, szacowanie, weryfikacja, umowa">
+        <rect x="10" y="20" width="115" height="80" rx="12" class="s fa"/><text x="67" y="56" text-anchor="middle" class="t-b">Wizja</text><text x="67" y="76" text-anchor="middle">to za mało</text>
+        <rect x="138" y="20" width="115" height="80" rx="12" class="s fa"/><text x="195" y="56" text-anchor="middle" class="t-b">Szacowanie</text><text x="195" y="76" text-anchor="middle">czasu i kosztu</text>
+        <rect x="266" y="20" width="115" height="80" rx="12" class="s fa"/><text x="323" y="56" text-anchor="middle" class="t-b">Weryfikacja</text><text x="323" y="76" text-anchor="middle">czy zrobione</text>
+        <rect x="394" y="20" width="115" height="80" rx="12" class="s fh"/><text x="451" y="56" text-anchor="middle" class="t-b t-dark">Umowa</text><text x="451" y="76" text-anchor="middle" class="t-dark">z klientem</text>
+        <text x="260" y="136" text-anchor="middle" class="t-hand t-acc">analiza wymagań = odkrywanie wymagań</text>
+      </svg>
+    </figure>
+    <h3>Rodzaje wymagań</h3>
+    <div class="two">
+      <div><span class="pill">Funkcjonalne</span><p><b>Co</b> system robi, np. „użytkownik może zresetować hasło”.</p></div>
+      <div><span class="pill">Niefunkcjonalne</span><p><b>Jak</b> system działa: wydajność, bezpieczeństwo, użyteczność, np. „lista ładuje się poniżej 2 s”.</p></div>
+    </div>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg><div><b>Zapamiętaj</b><span class="hand">S-W-U: Szacujemy, Weryfikujemy, podpisujemy Umowę</span></div></div>
+  </section>
+
+  <section class="note" id="w2-formy"><span class="num">2.2</span>
+    <h2>Formy gromadzenia i zapisu wymagań</h2>
+    <div class="tbl"><table>
+      <tr><th>Forma</th><th>Co to jest</th><th>Kiedy pasuje</th></tr>
+      <tr><td><b>Przypadki użycia</b> (UC)</td><td>Diagram UML i opis interakcji aktora z systemem</td><td>Gdy trzeba pokazać system oczami użytkowników i opisać scenariusze krok po kroku</td></tr>
+      <tr><td><b>BPMN</b></td><td>Business Process Model and Notation: notacja do modelowania procesów biznesowych</td><td>Gdy ważny jest przepływ procesu, kolejność kroków i role</td></tr>
+      <tr><td><b>User stories</b></td><td>Krótkie historie pisane językiem użytkownika</td><td>Agile: proste, wygodne do planowania, mało „szumu”</td></tr>
+      <tr><td><b>Inne</b></td><td>Np. model koncepcyjny, persony, prototypy</td><td>Uzupełniająco</td></tr>
+    </table></div>
+  </section>
+
+  <section class="note" id="w2-uc"><span class="num">2.3</span>
+    <h2>Diagram przypadków użycia</h2>
+    <p>Pokazuje system <mark>z perspektywy jego użytkowników</mark> i jego interakcje z zewnętrznymi aktorami (niekoniecznie ludźmi). Przydaje się przy Behavior Driven Development (BDD). Każdy przypadek użycia można opisać dalej, np. diagramem aktywności.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Przykładowy diagram przypadków użycia sklepu: aktorzy Klient i Klient VIP, przypadki Złóż zamówienie, Zaloguj, Użyj kodu rabatowego">
+        <circle cx="50" cy="90" r="14" class="s fc"/><path d="M50 104 v40 M26 118 h48 M50 144 l-18 28 M50 144 l18 28" class="s"/>
+        <text x="50" y="192" text-anchor="middle" class="t-b">Klient</text>
+        <circle cx="50" cy="232" r="10" class="s fc"/><path d="M50 242 v20 M34 250 h32 M50 262 l-12 18 M50 262 l12 18" class="s"/>
+        <text x="96" y="262" class="t-b">Klient VIP</text>
+        <path d="M50 222 v-26" class="s"/><path d="M42 204 l8 -10 l8 10z" class="s fc"/>
+        <rect x="150" y="16" width="440" height="270" rx="10" class="s"/>
+        <text x="166" y="38" class="t-b t-mut">Sklep internetowy</text>
+        <ellipse cx="270" cy="110" rx="90" ry="30" class="s fa"/><text x="270" y="115" text-anchor="middle" class="t-b">Złóż zamówienie</text>
+        <ellipse cx="490" cy="80" rx="80" ry="28" class="s fc"/><text x="490" y="85" text-anchor="middle">Zaloguj</text>
+        <ellipse cx="460" cy="220" rx="110" ry="30" class="s fc"/><text x="460" y="225" text-anchor="middle">Użyj kodu rabatowego</text>
+        <path d="M74 120 L180 110" class="s"/>
+        <path d="M360 104 L410 88" class="sa" stroke-dasharray="6 5"/><path d="M398 84 l12 4 -9 9" class="sa"/>
+        <text x="392" y="74" text-anchor="middle" class="t-acc" style="font-size:12px">«include»</text>
+        <path d="M420 192 L320 136" class="sa" stroke-dasharray="6 5"/><path d="M324 148 l-4 -12 13 1" class="sa"/>
+        <text x="392" y="160" class="t-acc" style="font-size:12px">«extend»</text>
+        <text x="200" y="270" class="t-hand t-acc">zawsze → include · czasem → extend</text>
+      </svg>
+      <figcaption>logowanie jest zawsze, rabat tylko czasem</figcaption>
+    </figure>
+    <h3>Elementy</h3>
+    <dl class="gloss">
+      <dt>Przypadek użycia</dt><dd>Zestaw funkcjonalności spełniający konkretną potrzebę użytkownika. Musi być połączony z aktorem albo zawierać się w innym / rozszerzać inny.</dd>
+      <dt>Aktor</dt><dd>Byt <b>zewnętrzny</b> wobec systemu, który wchodzi z nim w interakcję (człowiek, inny system).</dd>
+      <dt>Ramy systemu</dt><dd>Prostokąt oznaczający granicę systemu lub podsystemu.</dd>
+      <dt>«include» – zawieranie</dt><dd>Rozbicie przypadku na mniejsze części; część wykonywana <b>zawsze</b> w ramach przypadku połączonego z aktorem.</dd>
+      <dt>«extend» – rozszerzenie</dt><dd>Przy okazji jednego przypadku <b>opcjonalnie</b> może zostać wykonany inny. Grot wskazuje na przypadek nadrzędny.</dd>
+      <dt>Dziedziczenie</dt><dd>Relacja między aktorami: aktor dziedziczący jest powiązany z tymi samymi przypadkami co aktor nadrzędny (Klient VIP robi wszystko to, co Klient).</dd>
+    </dl>
+    <p style="color:var(--muted);font-size:14px">Uwaga: w standardzie UML strzałka «include» biegnie od przypadku bazowego do zawieranego, a «extend» od rozszerzającego do bazowego.</p>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg><div><b>Zapamiętaj</b><span class="hand">INclude = IN zawsze (zawsze w środku). EXtend = EXtra, czasem.</span></div></div>
+  </section>
+
+  <section class="note" id="w2-spec"><span class="num">2.4</span>
+    <h2>Specyfikacja przypadków użycia</h2>
+    <p>Trzy poziomy szczegółowości:</p>
+    <figure class="fig">
+      <svg viewBox="0 0 540 190" role="img" aria-label="Trzy poziomy specyfikacji: nieformalna, formalna skrócona, formalna pełna wg Cockburna">
+        <rect x="10" y="120" width="160" height="56" rx="10" class="s fc"/><text x="90" y="144" text-anchor="middle" class="t-b">Nieformalna</text><text x="90" y="163" text-anchor="middle" class="t-mut">akapit tekstu</text>
+        <rect x="190" y="72" width="160" height="104" rx="10" class="s fa"/><text x="270" y="100" text-anchor="middle" class="t-b">Formalna skrócona</text><text x="270" y="122" text-anchor="middle" class="t-mut">ID, cel, aktor,</text><text x="270" y="140" text-anchor="middle" class="t-mut">scenariusz główny</text><text x="270" y="158" text-anchor="middle" class="t-mut">+ alternatywne</text>
+        <rect x="370" y="14" width="160" height="162" rx="10" class="s fh"/><text x="450" y="40" text-anchor="middle" class="t-b t-dark">Formalna pełna</text><text x="450" y="60" text-anchor="middle" class="t-dark">szablon Cockburna</text>
+        <path d="M392 80 h116 M392 96 h116 M392 112 h116 M392 128 h90 M392 144 h116 M392 160 h70" class="s"/>
+      </svg>
+      <figcaption>im wyżej, tym więcej pól</figcaption>
+    </figure>
+    <h3>Formalna skrócona – przykład: UC-01 Logowanie</h3>
+    <div class="tbl"><table>
+      <tr><th>Cel</th><td>Zalogowanie do systemu</td></tr>
+      <tr><th>Aktor główny</th><td>Użytkownik (niezalogowany)</td></tr>
+      <tr><th>Warunek początkowy</th><td>Użytkownik nie jest zalogowany</td></tr>
+      <tr><th>Zdarzenie inicjujące</th><td>Użytkownik otworzył stronę logowania</td></tr>
+      <tr><th>Scenariusz główny</th><td>1. System pokazuje pola login i hasło · 2. Użytkownik je podaje · 3. System pozytywnie weryfikuje dane · 4. Użytkownik jest zalogowany</td></tr>
+      <tr><th>Alternatywne</th><td>2.1 brak konta → rejestracja (UC-05) · 3.1 błędne dane → ponowne pytanie · 3.2 → przypomnienie hasła (UC-07) · 3.3 błąd ponad 3 razy → blokada konta (UC-09)</td></tr>
+    </table></div>
+    <p>Numer scenariusza alternatywnego wskazuje <b>krok scenariusza głównego</b>, od którego odchodzi (3.1 = odejście w kroku 3).</p>
+    <h3>Szablon pełny (Alistair Cockburn) – pola</h3>
+    <p><span class="pill">ID i nazwa</span> <span class="pill">Autor</span> <span class="pill">Cel</span> <span class="pill">Kontekst</span> <span class="pill">Zakres (black box)</span> <span class="pill">Poziom</span> <span class="pill">Aktor główny</span> <span class="pill">Uczestnicy</span> <span class="pill">Wyzwalacz</span> <span class="pill">Warunek początkowy</span> <span class="pill">Minimalna gwarancja</span> <span class="pill">Scenariusz główny (3–7 kroków)</span> <span class="pill">Rozszerzenia</span></p>
+    <p><b>Minimalna gwarancja</b> – jak chronione są interesy przy każdym zakończeniu, także nieudanym. Rozszerzenie <b>*.</b> to zdarzenie możliwe w dowolnym momencie (np. zamknięcie przeglądarki).</p>
+    <p>Poziomy przypadków (kolory Cockburna): <b>biznesowy</b>, <b>funkcja / „poziom morza” (niebieski)</b>, <b>podfunkcja</b> z detalami implementacji.</p>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg><div><b>Zapamiętaj</b><span class="hand">Scenariusz główny: 3–7 kroków. Za dużo? Rozbij. Za mało? To pewnie podfunkcja.</span></div></div>
+  </section>
+
+  <section class="note" id="w2-us"><span class="num">2.5</span>
+    <h2>Historie użytkownika (user stories)</h2>
+    <div class="two">
+      <figure class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="Karta historii użytkownika: numer, tytuł, opis, priorytet, koszt">
+          <rect x="20" y="14" width="240" height="170" rx="6" class="s fh" transform="rotate(-2 140 100)"/>
+          <text x="40" y="44" class="t-b t-dark">Logowanie</text><text x="236" y="44" text-anchor="end" class="t-dark">#12</text>
+          <path d="M40 54 h196" class="s"/>
+          <text x="40" y="78" class="t-dark">Po uruchomieniu systemu</text>
+          <text x="40" y="96" class="t-dark">pojawia się ekran logowania</text>
+          <text x="40" y="114" class="t-dark">z polem login i hasło.</text>
+          <text x="40" y="156" class="t-dark">Priorytet: 2</text><text x="236" y="156" text-anchor="end" class="t-dark">Koszt: 4</text>
+          <text x="140" y="204" text-anchor="middle" class="t-hand t-acc">na odwrocie: testy akceptacyjne</text>
+        </svg>
+        <figcaption>karteczka: numer, tytuł, max 3 zdania</figcaption>
+      </figure>
+      <div>
+        <h3 style="margin-top:0">Karta historii</h3>
+        <ul>
+          <li>Numer (czasem data) i prosty tytuł.</li>
+          <li>Krótki opis, <b>do 3 zdań</b>, bez aspektów technicznych.</li>
+          <li>Priorytet, koszt, czasem ryzyko.</li>
+          <li>Na odwrocie czasem testy akceptacyjne.</li>
+        </ul>
+        <h3>Typowy format</h3>
+        <p><mark>Jako &lt;rola&gt; chcę &lt;cel&gt;, aby &lt;korzyść&gt;</mark></p>
+        <p style="font-size:15px">„Jako menedżer chcę widzieć postępy współpracowników, aby lepiej raportować sukcesy i porażki.”</p>
+      </div>
+    </div>
+    <h3>Kryteria akceptacyjne – przykład</h3>
+    <p><i>Jako użytkownik chcę zobaczyć listę restauracji, bym mógł wybrać najlepszą opcję.</i></p>
+    <ol>
+      <li>Lista umożliwia sortowanie po ocenach i odległości.</li>
+      <li>Aplikacja podpowiada restauracje na podstawie historii profilu.</li>
+      <li>Lista zajmuje jeden ekran; przy większej liczbie pozycji jest paginacja.</li>
+      <li>Lista ładuje się poniżej 2 sekund.</li>
+    </ol>
+    <h3>Jak pisać historie</h3>
+    <div class="two">
+      <ul><li>Opisz <b>intencję</b>.</li><li><b>Jedna funkcja</b> w historii.</li></ul>
+      <ul><li><b>Unikaj opisywania interfejsu.</b></li><li>Pisz krótko i konkretnie.</li></ul>
+    </div>
+    <h3>Proces tworzenia historii</h3>
+    <figure class="fig">
+      <svg viewBox="0 0 560 120" role="img" aria-label="Cykl: aktorzy, obszary funkcjonalne, historie, scenariusze">
+        <rect x="6" y="30" width="122" height="54" rx="27" class="s fa"/><text x="67" y="62" text-anchor="middle" class="t-b">1 Aktorzy</text>
+        <rect x="148" y="30" width="122" height="54" rx="27" class="s fa"/><text x="209" y="54" text-anchor="middle" class="t-b">2 Obszary</text><text x="209" y="72" text-anchor="middle">funkcjonalne</text>
+        <rect x="290" y="30" width="122" height="54" rx="27" class="s fa"/><text x="351" y="62" text-anchor="middle" class="t-b">3 Historie</text>
+        <rect x="432" y="30" width="122" height="54" rx="27" class="s fh"/><text x="493" y="62" text-anchor="middle" class="t-b t-dark">4 Scenariusze</text>
+        <path d="M128 57 h18 M270 57 h18 M412 57 h18" class="sa"/>
+        <path d="M493 86 q0 28 -213 28 q-213 0 -213 -28" class="sa" stroke-dasharray="5 5"/>
+        <text x="280" y="20" text-anchor="middle" class="t-hand t-acc">potem: odfiltruj szczegóły, szlifuj relacje</text>
+      </svg>
+    </figure>
+    <p><b>Narzędzia:</b> kartki papieru, notatnik, arkusze kalkulacyjne, dedykowane narzędzia planistyczne. <b>Zalety w praktyce:</b> prostota i wygoda, łatwe planowanie, niski poziom „szumu”.</p>
+    <p><b>Model koncepcyjny</b> – mapa funkcji systemu (np. import danych, edycja, eksport, generowanie raportu) połączonych przepływem logiki.</p>
+  </section>
+
+  <section class="note" id="w2-invest"><span class="num">2.6</span>
+    <h2>INVEST i epiki</h2>
+    <figure class="fig">
+      <svg viewBox="0 0 600 130" role="img" aria-label="INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable">
+        <g class="t-b">
+          <rect x="6" y="10" width="90" height="70" rx="12" class="s fa"/><text x="51" y="58" text-anchor="middle" style="font-size:38px" class="t-acc">I</text>
+          <rect x="106" y="10" width="90" height="70" rx="12" class="s fa"/><text x="151" y="58" text-anchor="middle" style="font-size:38px" class="t-acc">N</text>
+          <rect x="206" y="10" width="90" height="70" rx="12" class="s fh"/><text x="251" y="58" text-anchor="middle" style="font-size:38px" class="t-dark">V</text>
+          <rect x="306" y="10" width="90" height="70" rx="12" class="s fa"/><text x="351" y="58" text-anchor="middle" style="font-size:38px" class="t-acc">E</text>
+          <rect x="406" y="10" width="90" height="70" rx="12" class="s fa"/><text x="451" y="58" text-anchor="middle" style="font-size:38px" class="t-acc">S</text>
+          <rect x="506" y="10" width="90" height="70" rx="12" class="s fa"/><text x="551" y="58" text-anchor="middle" style="font-size:38px" class="t-acc">T</text>
+        </g>
+        <text x="51" y="102" text-anchor="middle">Niezależna</text><text x="151" y="102" text-anchor="middle">Negocjowalna</text><text x="251" y="102" text-anchor="middle">Wartościowa</text><text x="351" y="102" text-anchor="middle">Szacowalna</text><text x="451" y="102" text-anchor="middle">Mała</text><text x="551" y="102" text-anchor="middle">Testowalna</text>
+        <text x="251" y="124" text-anchor="middle" class="t-hand t-bad">V = Valuable, nie Verified!</text>
+      </svg>
+    </figure>
+    <ul>
+      <li><b>Independent</b> – historie nie nakładają się, można je planować i wdrażać w dowolnej kolejności.</li>
+      <li><b>Negotiable</b> – oddaje istotę, nie szczegóły; szczegóły ustala się w rozmowie.</li>
+      <li><b>Valuable</b> – daje wartość użytkownikowi lub klientowi.</li>
+      <li><b>Estimable</b> – da się oszacować; to częściowo efekt negocjacji (trudno szacować to, czego nie rozumiemy).</li>
+      <li><b>Small</b> – mała, najwyżej kilka tygodni pracy.</li>
+      <li><b>Testable</b> – da się sprawdzić, np. kryteriami akceptacyjnymi.</li>
+    </ul>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg><div><b>Zapamiętaj</b><span class="hand">INVEST – „inwestuj” w dobre historie: Niezależne, Negocjowalne, Wartościowe, Szacowalne, Małe, Testowalne</span></div></div>
+    <h3>Epiki – hierarchizacja</h3>
+    <p>Gdy historii jest dużo, grupuje się je w <b>epiki</b> (epic), czyli duże obszary funkcjonalne.</p>
+    <div class="two">
+      <div><span class="pill">Epic #1: Zarządzanie klientami</span><ul><li>Lista klientów</li><li>Dodawanie klienta</li><li>Usuwanie klienta</li><li>Widok szczegółów</li><li>Wyszukiwanie</li><li>Dezaktywacja</li></ul></div>
+      <div><span class="pill">Epic #2: Eksport danych</span><ul><li>Eksport do Excela</li><li>Eksport do CSV</li><li>Eksport do obrazka</li><li>Eksport do ZIP</li></ul></div>
+    </div>
+  </section>
+
+  <section class="note" id="w2-persony"><span class="num">2.7</span>
+    <h2>Persony</h2>
+    <div class="two">
+      <div>
+        <p><b>Persona</b> to <mark>fikcyjna postać reprezentująca określony typ użytkownika</mark>. Stosuje się je w User-Centered Design i w marketingu.</p>
+        <p>Typowe cechy persony: imię, zdjęcie, zawód i rola, dane demograficzne, wartości i potrzeby, obawy i podejście do nowych technologii.</p>
+      </div>
+      <figure class="fig">
+        <svg viewBox="0 0 260 200" role="img" aria-label="Karta persony">
+          <rect x="10" y="10" width="240" height="180" rx="14" class="s fc"/>
+          <circle cx="58" cy="60" r="28" class="s fa"/><circle cx="58" cy="52" r="10" class="s fc"/><path d="M40 80 q18 -20 36 0" class="s"/>
+          <text x="100" y="52" class="t-b">Frank, 68 lat</text><text x="100" y="72" class="t-mut">emeryt</text>
+          <path d="M26 108 h208" class="s"/>
+          <text x="26" y="132">✓ lubi spokój i dokładność</text>
+          <text x="26" y="154">✗ nie lubi pośpiechu</text>
+          <text x="26" y="176">? nowe technologie</text>
+        </svg>
+        <figcaption>wymyślona, ale typowa</figcaption>
+      </figure>
+    </div>
+    <h3>Persona zmienia projekt</h3>
+    <div class="tbl"><table>
+      <tr><th>Persona</th><th>Cechy</th><th>Czego potrzebuje od systemu</th></tr>
+      <tr><td><b>Frank, 68</b> (klient pocztowy)</td><td>Ceni wolny czas, nie lubi się spieszyć, dokładny</td><td>Prosty interfejs, duże przyciski, mało opcji naraz</td></tr>
+      <tr><td><b>Tomek, 32</b> (analityk)</td><td>Ceni możliwości, nie lubi ograniczeń narzędzi, samodzielny, szybki</td><td>Dużo funkcji, skróty klawiszowe, konfiguracja</td></tr>
+    </table></div>
+    <div class="mem"><svg viewBox="0 0 64 40" aria-hidden="true"><ellipse cx="14" cy="20" rx="12" ry="8" class="s fc"/><circle cx="14" cy="20" r="4" class="fi"/><path d="M28 20 h8" class="sa"/><path d="M34 16 l4 4 -4 4" class="sa"/><path d="M44 30 q-6 -2 -4 -10 q0 -8 10 -9 q10 1 10 9 q2 8 -4 10z" class="s fh"/></svg><div><b>Zapamiętaj</b><span class="hand">Ten sam system, inna persona = inny interfejs. Frank chce prosto, Tomek chce dużo.</span></div></div>
+  </section>
+</main>
+
+<!-- ===================== QUIZ ===================== -->
+<main id="view-quiz" class="wrap" hidden>
+  <h1>Quiz przed wejściówką</h1>
+  <p class="lead">Pytania z wykładów 1–2. Jak na kolosie: zaznaczasz wszystkie pasujące odpowiedzi i klikasz „Sprawdź”. Punkt tylko za komplet bez błędów. „Wejściówka” losuje 8 pytań, „Styl kolosa” daje pytania z wieloma zdaniami do oceny.</p>
+  <div class="qbar" role="group" aria-label="Tryb">
+    <button class="btn primary" id="m-entry" type="button">Wejściówka (8 losowych)</button>
+    <button class="btn" id="m-kolos" type="button">Styl kolosa</button>
+    <button class="btn" id="m-all" type="button">Wszystkie pytania</button>
+    <button class="btn" id="m-wrong" type="button">Powtórz błędne</button>
+    <button class="btn" id="m-flash" type="button">Fiszki</button>
+  </div>
+  <div class="progress" aria-hidden="true"><i id="prog" style="width:0"></i></div>
+  <div id="stage"></div>
+  <p class="hint" id="best"></p>
+</main>
+
+<script>
+const Q=[
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące specyfikacji wymagań:",o:["Sama wizja produktu zwykle nie wystarcza do realizacji projektu.","Specyfikacja pozwala oszacować czas i koszt.","Specyfikacja może być podstawą umowy z klientem.","Specyfikacja pozwala zweryfikować, czy system spełnia wymagania.","Analiza wymagań polega wyłącznie na spisaniu tego, co klient dyktuje."],a:[0,1,2,3],w:"Analiza wymagań to ODKRYWANIE wymagań, a nie samo spisywanie."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące diagramu przypadków użycia:",o:["Pozwala spojrzeć na system z perspektywy jego użytkowników.","Aktorami mogą być wyłącznie ludzie.","Każdy przypadek użycia musi być połączony z aktorem albo zawierać się w innym / rozszerzać inny.","Ramy systemu oznaczają granicę systemu lub podsystemu.","Diagram przypadków użycia zastępuje opis scenariuszy krok po kroku."],a:[1,4],w:"Aktorzy nie muszą być ludźmi. Przypadki opisuje się dodatkowo scenariuszami lub np. diagramem aktywności."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące dziedziczenia na diagramie przypadków użycia (wg wykładu):",o:["Dziedziczenie może łączyć aktorów.","Aktor dziedziczący jest powiązany z tymi samymi przypadkami użycia co aktor nadrzędny.","Aktor dziedziczący traci dostęp do przypadków aktora nadrzędnego.","Klient VIP dziedziczący po Kliencie może wykonywać przypadki użycia Klienta."],a:[0,1,3],w:"Dziedziczenie aktorów: potomek ma wszystko, co rodzic, plus ewentualnie więcej."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące poziomów specyfikacji przypadków użycia:",o:["Wyróżniamy specyfikację nieformalną, formalną skróconą i formalną pełną.","Pełny szablon specyfikacji pochodzi od Alistaira Cockburna.","Specyfikacja nieformalna ma postać krótkiego opisu tekstem ciągłym.","Specyfikacja formalna skrócona nie zawiera scenariusza głównego.","Pełny szablon zawiera m.in. minimalną gwarancję i wyzwalacz."],a:[0,1,2,4],w:"Formalna skrócona zawiera cel, aktora, warunki, scenariusz główny i alternatywne."},
+ {t:"kolos",q:"W specyfikacji UC-01 Logowanie scenariusz alternatywny 3.3 oznacza, że:",o:["Odchodzi od kroku 3 scenariusza głównego.","Jest trzecim wariantem odejścia od tego kroku.","Jest wykonywany zawsze po kroku 3.","Dotyczy trzeciego aktora."],a:[0,1],w:"Numer X.Y: X – krok scenariusza głównego, Y – kolejny wariant odejścia."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące pełnego szablonu przypadku użycia (Cockburn):",o:["Scenariusz główny powinien mieć zwykle 3–7 kroków.","Minimalna gwarancja opisuje, jak chronione są interesy także przy nieudanym zakończeniu.","Wyzwalacz (trigger) to zdarzenie rozpoczynające przypadek użycia.","Rozszerzenie oznaczone *. dotyczy wyłącznie ostatniego kroku.","Szablon nie przewiduje pola z aktorem głównym."],a:[3,4],w:"*. to zdarzenie możliwe w DOWOLNYM momencie (np. zamknięcie przeglądarki). Aktor główny jest w szablonie."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące karty historii użytkownika:",o:["Zawiera numer historii i prosty tytuł.","Opis ma do 3 zdań i nie zawiera aspektów technicznych.","Może zawierać priorytet i koszt.","Na odwrocie mogą być testy akceptacyjne.","Musi zawierać projekt interfejsu."],a:[0,1,2,3],w:"Przy pisaniu historii unika się opisywania interfejsu."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące kryteriów akceptacyjnych:",o:["Doprecyzowują, kiedy historia jest zrealizowana.","Mogą zawierać wymagania niefunkcjonalne, np. czas ładowania poniżej 2 s.","Pozwalają przetestować historię.","Zastępują treść user story.","Są zawsze identyczne dla wszystkich historii."],a:[0,1,2],w:"Kryteria uzupełniają historię i czynią ją testowalną (T w INVEST)."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zasady pisania user stories:",o:["Opisz intencję użytkownika.","Jedna funkcja w jednej historii.","Opisz dokładnie wygląd przycisków i ekranów.","Pisz krótko i konkretnie.","Umieść w jednej historii kilka niezależnych funkcji, żeby było ich mniej."],a:[2,4],w:"Unikaj opisywania interfejsu; jedna funkcja na historię."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące epików:",o:["Epik grupuje wiele powiązanych historii użytkownika.","„Eksport danych” może być epikiem, a „Eksport do CSV” historią.","Epik jest mniejszy niż pojedyncza historia.","Epiki pomagają uporządkować dużą liczbę historii."],a:[0,1,3],w:"Epik to duży obszar funkcjonalny, dzielony na mniejsze historie."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące person:",o:["Persona to fikcyjna postać reprezentująca typ użytkownika.","Persony stosuje się w User-Centered Design i marketingu.","Persona to konkretny, prawdziwy klient z bazy danych.","Persona może zawierać obawy i podejście do nowych technologii.","Różne persony mogą prowadzić do różnych decyzji projektowych dla tego samego systemu."],a:[0,1,3,4],w:"Persona jest fikcyjna, ale typowa (np. Frank 68 lat vs Tomek 32 lata)."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania o formach zapisu wymagań:",o:["BPMN służy do modelowania procesów biznesowych.","User stories są popularne w metodach zwinnych.","Przypadki użycia pokazują interakcje aktorów z systemem.","BPMN to rodzaj user story.","Model koncepcyjny pokazuje funkcje systemu i przepływ logiki między nimi."],a:[0,1,2,4],w:"BPMN = Business Process Model and Notation – osobna notacja procesowa."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące relacji na diagramie przypadków użycia:",o:["<<include>> pozwala rozbić przypadek użycia na mniejsze części.","Strzałka <<extend>> wskazuje od przypadku rozszerzającego do przypadku bazowego.","<<include>> pozwala wydzielić zachowanie wspólne dla kilku przypadków użycia.","<<extend>> opisuje zachowanie wykonywane zawsze, bez warunków.","Aktorzy mogą być ze sobą powiązani relacją generalizacji."],a:[0,1,2,4],w:"<<extend>> jest warunkowe/opcjonalne. Kierunki strzałek: include: baza → włączany; extend: rozszerzający → baza."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące aktorów:",o:["Aktor reprezentuje rolę, a nie konkretną osobę.","Aktor musi być człowiekiem.","Jedna osoba może pełnić role kilku aktorów.","Aktor znajduje się wewnątrz granicy systemu.","Zegar/czas lub system zewnętrzny może być aktorem."],a:[1,3],w:"Aktor jest ZEWNĘTRZNY względem systemu i może być innym systemem lub czasem."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące przypadku użycia:",o:["Opisuje funkcję systemu dającą aktorowi wartość / mierzalny rezultat.","Nazwa przypadku użycia zwykle ma postać czasownika z dopełnieniem (np. „Złóż zamówienie”).","Przypadek użycia opisuje wewnętrzną implementację, np. klasy i tabele bazy danych.","Scenariusz przypadku użycia może mieć ścieżkę główną i ścieżki alternatywne.","Każdy przypadek użycia musi mieć relację <<extend>>."],a:[0,1,3],w:"Przypadek użycia opisuje CO system robi z perspektywy aktora, nie JAK jest zaimplementowany."},
+ {t:"kolos",q:"Co oznaczają litery akronimu INVEST (dobre user stories)? Wybierz poprawne rozwinięcia:",o:["I – Independent (niezależna)","N – Negotiable (negocjowalna)","V – Verified (zweryfikowana)","E – Estimable (możliwa do oszacowania)","S – Small (mała)","T – Testable (testowalna)"],a:[0,1,3,4,5],w:"V oznacza Valuable – wartościowa dla użytkownika/klienta."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące formatu user story:",o:["Typowy szablon: „Jako <rola> chcę <cel>, aby <korzyść>”.","Część „aby…” opisuje wartość biznesową dla użytkownika.","User story zastępuje całkowicie rozmowę z klientem.","Do historii dołącza się kryteria akceptacji, które pozwalają ją przetestować.","Historie użytkownika pisze się językiem technicznym programistów."],a:[0,1,3],w:"Karta – Rozmowa – Potwierdzenie (3C): historia jest zaproszeniem do rozmowy, pisana językiem użytkownika."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące user stories:",o:["Duża, ogólna historia nazywana jest epiką (epic).","Epikę dzieli się na mniejsze historie przed implementacją.","Historia, której nie da się przetestować, jest dobrze napisana.","Historia powinna dostarczać wartość użytkownikowi lub klientowi.","Historie muszą być realizowane w ściśle ustalonej kolejności, bo zależą od siebie."],a:[2,4],w:"INVEST: historia ma być Testable i Independent."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące wymagań:",o:["Wymagania funkcjonalne opisują, co system ma robić.","Wymagania niefunkcjonalne opisują cechy jakościowe, np. wydajność czy bezpieczeństwo.","„System ma być szybki” to dobrze sformułowane, mierzalne wymaganie.","Dobre wymaganie powinno być jednoznaczne i weryfikowalne.","Wymagania prawne mogą być źródłem wymagań wobec systemu."],a:[0,1,3,4],w:"„Szybki” jest niemierzalne – lepiej: „czas odpowiedzi < 2 s dla 95% żądań”."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące walidacji i weryfikacji:",o:["Walidacja odpowiada na pytanie: czy budujemy właściwy produkt?","Weryfikacja odpowiada na pytanie: czy budujemy produkt poprawnie?","Walidację wymagań przeprowadza się wyłącznie po wdrożeniu systemu.","Weryfikacja sprawdza zgodność produktu ze specyfikacją.","Walidacja i weryfikacja to synonimy."],a:[2,4],w:"Walidację warto prowadzić jak najwcześniej (np. prototypy, przeglądy z klientem). To różne pojęcia."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące elevator pitch:",o:["Trwa zwykle kilkadziesiąt sekund.","Powinien wskazać, dla kogo jest produkt i jaki problem rozwiązuje.","Zawiera szczegółową specyfikację techniczną.","Może wskazać, czym produkt różni się od konkurencji.","Jest formą przedstawienia wizji produktu."],a:[0,1,3,4],w:"Pitch ma być krótki i ogólny – bez szczegółów technicznych."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące pitch decku:",o:["Zawiera opis problemu i proponowanego rozwiązania.","Zawiera analizę rozwiązań konkurencyjnych.","Przedstawia model biznesowy i budżet.","Prezentuje zespół realizujący projekt.","Zawiera kod źródłowy prototypu."],a:[0,1,2,3],w:"8 elementów: zespół, problem, korzyści, rozwiązanie, rynek, konkurencja, model biznesowy, budżet."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące technik wspierających tworzenie wizji:",o:["Mind mapa porządkuje pomysły wokół centralnego pojęcia.","Rysunek koncepcyjny pomaga pokazać ideę systemu klientowi.","Lista funkcji musi od razu zawierać szczegółowe kryteria akceptacji.","Mapa funkcji pomaga uporządkować funkcje systemu.","Techniki te stosuje się wyłącznie w modelu kaskadowym."],a:[2,4],w:"Wizja jest ogólna; szczegóły przychodzą w kolejnych iteracjach. Techniki są niezależne od metodyki."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące metod iteracyjnych (np. RUP):",o:["Projekt dzieli się na iteracje.","W każdej iteracji mogą występować analiza, projektowanie, implementacja i testy.","RUP to skrót od Rational Unified Process.","W metodach iteracyjnych wymagania zbiera się tylko raz, na samym początku.","Metody iteracyjne pozwalają wcześniej otrzymać informację zwrotną."],a:[0,1,2,4],w:"Iteracje pozwalają doprecyzowywać wymagania w trakcie projektu."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące interesariuszy:",o:["Interesariuszem jest każdy, na kogo system wpływa lub kto ma wpływ na system.","Analityk systemowy pośredniczy między klientem a zespołem wykonawczym.","Programista nie jest interesariuszem projektu.","Użytkownicy końcowi i zamawiający to mogą być różne osoby.","Urząd regulujący przepisy może być interesariuszem."],a:[0,1,3,4],w:"Na wykładzie: biznes, klient, analityk systemowy, programista – wszyscy są interesariuszami."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące przykładu systemu monitorowania jakości powietrza:",o:["Gęsta sieć czujników odpowiada na brak wystarczającej informacji.","Aplikacja mobilna z ostrzeżeniami poprawia komunikację z mieszkańcami.","Jedynym aktorem systemu są czujniki.","Aplikacja analityczna pozwala badać zmiany jakości powietrza.","Urzędnicy odpowiedzialni za ochronę środowiska są aktorami systemu."],a:[2],w:"Aktorzy: mieszkańcy miasta oraz urzędnicy Urzędu Miasta."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdanie/a dotyczące diagramów przypadków użycia:",o:["Dziedziczenie przypadków użycia oznacza, że jeden przypadek uszczegóławia zakres działania podstawowego przypadku użycia (np. „Logowanie za pomocą Google OAuth” dziedziczy z „Logowanie”).","Relacja <<include>> oznacza, że wykonanie jednego przypadku użycia zawiera ZAWSZE wykonanie drugiego przypadku, na który wskazuje.","Relacja <<extend>> oznacza, że wykonanie jednego przypadku użycia zawiera ZAWSZE wykonanie drugiego przypadku, na który wskazuje.","Jeden aktor może mieć powiązanych wiele przypadków użycia na jednym diagramie, co oznacza, że może wykonać wiele funkcji w systemie.","Zewnętrzny system może być aktorem projektowanego systemu."],a:[2],w:"<<extend>> to rozszerzenie OPCJONALNE (warunkowe), więc „zawsze” jest fałszem. ZAWSZE dotyczy <<include>>. Pozostałe zdania są prawdziwe."},
+ {t:"kolos",q:"Wybierz poprawne odpowiedzi dotyczące user story:",o:["Dobre historie są zazwyczaj niewielkie, reprezentują co najwyżej kilka tygodni pracy.","Historie użytkownika powinny być na tyle obszerne, by móc wyczytać z nich wszystkie niezbędne funkcjonalności.","Treść user story nie podlega negocjacjom, ponieważ pomaga w oszacowaniu czasu wdrożenia.","Najłatwiej jest pracować z historiami, jeśli są one niezależne.","Dobra historia oddaje istotę, a nie szczegóły, i podlega negocjacjom.","Możliwość oszacowania user story jest częściowo funkcją negocjacji, bo trudno oszacować historię, której nie rozumiemy.","Chcielibyśmy, aby historie nie nakładały się koncepcyjnie, by móc je planować i wdrażać w dowolnej kolejności."],a:[0,3,4,5,6],w:"INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable. Historie mają być małe i negocjowalne, więc b i c są fałszywe."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące modelu kaskadowego:",o:["Etapy realizowane są sekwencyjnie, kolejny po zakończeniu poprzedniego.","Zakres jest ustalony, a koszt i czas są szacowane.","Zakłada stałe terminy i zmienny zakres wymagań.","Analiza wymagań następuje po etapie projektowania.","Ostatnim etapem modelu jest utrzymanie."],a:[0,1,4],w:"Stałe terminy i zmienny zakres to Agile. Kolejność: planowanie, analiza, projektowanie… więc analiza jest PRZED projektowaniem."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące metod zwinnych (Agile):",o:["Agile to proces iteracyjno-ewolucyjny.","Agile przedkłada podążanie za planem nad reagowanie na zmianę.","W Agile terminy są stałe, a zakres wymagań zmienny.","Precyzowanie i walidacja wymagań są możliwe bez współpracy z zamawiającym.","Kompletna dokumentacja jest ważniejsza niż działające oprogramowanie."],a:[1,3,4],w:"Agile: reagowanie na zmianę zamiast planu, ścisła współpraca z klientem, działające oprogramowanie ponad dokumentację."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące wiedzy ukrytej (tacit knowledge):",o:["Pojęcie przypisuje się Michaelowi Polanyiemu.","Łatwo ją zapisać w specyfikacji wymagań.","Osoba ją posiadająca często nie jest jej świadoma.","Przekazuje się ją m.in. przez wspólną pracę, rozmowę i doświadczenia.","Najlepiej wydobywać ją pytaniami zamkniętymi."],a:[0,2,3],w:"Wiedzę ukrytą trudno wyartykułować; wydobywa się ją pytaniami OTWARTYMI."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące rozmowy z klientem:",o:["Pytania otwarte pomagają w eksploracji przestrzeni rozwiązań.","Pytania zamknięte pomagają w doprecyzowaniu wymagań.","„Czy dane mają być prezentowane w tabelce?” to przykład pytania otwartego.","Na pierwszych spotkaniach należy ustalić jak najwięcej szczegółów.","Szczegóły nie powinny zaburzać rozumienia całości i celu projektu."],a:[0,1,4],w:"Pytanie o tabelkę jest zamknięte (tak/nie). Pierwsze rozmowy służą eksploracji; szczegóły w kolejnych iteracjach."},
+ {t:"kolos",q:"Wybierz poprawne odpowiedzi dotyczące wizji produktu:",o:["Wizja odpowiada na pytania o dziedzinę, problem, cel i główne funkcje.","Pozwala zidentyfikować odbiorców i dziedzinę działania systemu.","Zawiera szczegółowy projekt interfejsu graficznego.","Pokazuje klientowi, że go rozumiemy, co zwiększa jego zaangażowanie.","Elevator pitch może być formą przedstawienia wizji.","Wizję tworzy się po zakończeniu implementacji."],a:[0,1,3,4],w:"Wizja jest PIERWSZYM, ogólnym krokiem analizy; GUI to ostatni krok."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące roli wymagań dla programistów:",o:["Programiści otrzymują wymagania „na wejściu” i na ich podstawie tworzą oprogramowanie.","W mniej sformalizowanych procesach programiści nie biorą udziału w formowaniu wymagań.","Zlecając oprogramowanie na zewnątrz (outsourcing), programista staje się klientem.","Błędy koncepcyjne w wymaganiach najtaniej wykrywać dopiero po testach."],a:[1,3],w:"W mniej formalnych procesach programiści WSPÓŁTWORZĄ wymagania. Błędy najtaniej wykrywać jak najwcześniej."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania dotyczące procesu analizy wymagań:",o:["Na szczycie piramidy wymagań znajdują się potrzeby.","Wymagania są najbardziej szczegółowym poziomem piramidy.","Projektowanie interfejsu graficznego jest pierwszym krokiem analizy.","Modelowanie procesów i scenariuszy następuje po stworzeniu modelu funkcjonalnego."],a:[0,1,3],w:"Od ogółu do szczegółu: wizja → model funkcjonalny → procesy i scenariusze → GUI."},
+ {t:"kolos",q:"Wskaż NIEPRAWDZIWE zdania dotyczące trójkąta ograniczeń (iron triangle):",o:["Wierzchołki to zakres, koszt i czas.","W Agile stały jest zakres wymagań.","Zmiana jednego wierzchołka wpływa na pozostałe.","Jakość jest jednym z trzech wierzchołków trójkąta."],a:[1,3],w:"W Agile stałe są czas i koszt, a zakres jest zmienny. Wierzchołki: zakres, koszt, czas."},
+ {t:"kolos",q:"Wybierz poprawne zdania dotyczące „klienta z wizją”:",o:["Często posługuje się ogólnymi hasłami.","Zwykle opisuje tylko pozytywne scenariusze.","Zawsze dostarcza kompletne scenariusze błędów.","Często nie doprecyzowuje częstych scenariuszy."],a:[0,1,3],w:"Ogólne hasła, nieprzemyślane funkcje, brak doprecyzowania, tylko pozytywne ścieżki."},
+ {t:"kolos",q:"Wskaż PRAWDZIWE zdania:",o:["„System odpowiada w mniej niż 2 s” to wymaganie niefunkcjonalne.","„Użytkownik może zresetować hasło” to wymaganie funkcjonalne.","Walidacja sprawdza zgodność produktu ze specyfikacją.","Aktorem może być system zewnętrzny."],a:[0,1,3],w:"Walidacja = czy budujemy WŁAŚCIWY produkt; zgodność ze specyfikacją to weryfikacja."},
+ {q:"Jakie są trzy wierzchołki trójkąta ograniczeń (iron triangle)?",o:["Jakość, zespół, klient","Zakres, koszt, czas","Analiza, projekt, testy","Wizja, funkcje, wymagania"],a:1,w:"Wymagania/zakres, koszty/budżet, plan/harmonogram/czas."},
+ {q:"Co jest STAŁE w modelu kaskadowym (wg trójkąta ograniczeń)?",o:["Czas","Budżet","Zakres (wymagania)","Nic"],a:2,w:"Kaskada ustala zakres na początku, a koszt i czas są szacowane."},
+ {q:"Co jest ZMIENNE (szacowane) w podejściu Agile?",o:["Zakres wymagań","Terminy","Budżet","Skład zespołu"],a:0,w:"Agile: stałe terminy i budżet, zmienny zakres."},
+ {q:"Który etap jest drugi w modelu kaskadowym?",o:["Projektowanie","Implementacja","Analiza (wymagań)","Testowanie"],a:2,w:"Planowanie → Analiza → Projektowanie → Implementacja → Testowanie → Wdrożenie → Utrzymanie."},
+ {q:"Ostatni etap modelu kaskadowego to:",o:["Wdrożenie","Testowanie","Utrzymanie","Odbiór"],a:2,w:"P-A-P-I-T-W-U: na końcu Utrzymanie."},
+ {q:"RUP to skrót od:",o:["Rapid User Prototyping","Rational Unified Process","Requirements Under Process","Reusable Unit Pattern"],a:1,w:"Rational Unified Process, przykład metody iteracyjnej."},
+ {q:"Która cecha NIE opisuje metod zwinnych według wykładu?",o:["Proces iteracyjno-ewolucyjny","Stałe terminy, zmienny zakres","Podążanie za planem zamiast reagowania na zmianę","Ścisła współpraca z zamawiającym"],a:2,w:"Agile jest empiryczny: reaguje na zmianę zamiast podążać za planem."},
+ {q:"W Agile ważniejsze jest:",o:["Kompletna dokumentacja","Działające oprogramowanie","Szczegółowy harmonogram","Stały zakres"],a:1,w:"Nacisk na działające oprogramowanie zamiast dokumentacji."},
+ {q:"Kolejność interesariuszy w procesie budowy oprogramowania (z wykładu):",o:["Klient → Programista → Analityk → Biznes","Biznes → Klient → Analityk systemowy → Programista","Analityk → Biznes → Klient → Programista","Programista → Analityk → Klient → Biznes"],a:1,w:"Biznes → Klient → Analityk systemowy → Programista."},
+ {q:"Które z poniższych NIE jest wyzwaniem analizy wymagań wymienionym na wykładzie?",o:["Zrozumienie realnych potrzeb","Zrozumienie kontekstu / obcej dziedziny","Wybór języka programowania","Komunikacja z klientem i zespołem"],a:2,w:"Wyzwania: potrzeby, problemy, kontekst, komunikacja (PPKK)."},
+ {q:"Typowa cecha „klienta z wizją” to:",o:["Opisuje wszystkie scenariusze błędów","Podaje tylko pozytywne scenariusze","Dostarcza gotową specyfikację","Nie ma żadnych oczekiwań"],a:1,w:"Ogólne hasła, nieprzemyślane funkcje, brak doprecyzowania, tylko pozytywne scenariusze."},
+ {q:"Kiedy najlepiej wykryć błąd koncepcyjny w wymaganiach?",o:["Po wdrożeniu","W trakcie testów","Jak najwcześniej","To bez znaczenia"],a:2,w:"Im wcześniej, tym większa oszczędność czasu na programowanie i testowanie."},
+ {q:"Piramida wymagań – od góry (ogół) do dołu (szczegół):",o:["Wymagania → Funkcje → Potrzeby","Potrzeby → Funkcje → Wymagania","Funkcje → Potrzeby → Wymagania","Potrzeby → Wymagania → Funkcje"],a:1,w:"PFW: Potrzeby → Funkcje → Wymagania."},
+ {q:"Pierwszy krok procesu analizy wymagań (od ogółu do szczegółu):",o:["Projektowanie GUI","Model funkcjonalny","Wizja produktu","Modelowanie procesów"],a:2,w:"Wizja → model funkcjonalny → procesy i scenariusze → interfejs graficzny."},
+ {q:"Ostatni krok procesu analizy wymagań z wykładu:",o:["Wizja produktu","Projektowanie interfejsu graficznego","Testowanie","Model funkcjonalny"],a:1,w:"Na końcu lejka jest projektowanie GUI."},
+ {q:"Na jakie pytania odpowiada wizja produktu?",o:["Dziedzina, problem, cel, główne funkcje","Budżet, termin, zespół, technologia","Kto, gdzie, kiedy, za ile","Tylko: jaki jest problem?"],a:0,w:"D-P-C-F: dziedzina, problem, cel, funkcje."},
+ {q:"Start-up na początku pyta:",o:["Ile to kosztuje?","Co? Dla kogo? Dlaczego?","Jaki framework?","Kiedy deadline?"],a:1,w:"Co? Dla kogo? Dlaczego?"},
+ {q:"Która motywacja klienta NIE pojawiła się na wykładzie?",o:["Mam problem, chcę coś usprawnić","Inni takie mają, ja też chcę","Chcę spełnić wymogi prawne","Chcę nauczyć się programować"],a:3,w:"Trzy motywacje: usprawnienie, „inni też mają”, wymogi prawne."},
+ {q:"Elevator pitch to:",o:["Dokument 50-stronicowy","Krótka prezentacja pomysłu na czas jazdy windą","Diagram UML","Harmonogram projektu"],a:1,w:"Ok. 30–60 sekund na przekonanie słuchacza."},
+ {q:"Który element NIE należy do typowego pitch decku z wykładu?",o:["Zespół","Model biznesowy","Kod źródłowy","Rozwiązania konkurencyjne"],a:2,w:"8 elementów: zespół, problem, korzyści, rozwiązanie, rynek, konkurencja, model biznesowy, budżet."},
+ {q:"W przykładzie monitorowania jakości powietrza aktorami są:",o:["Mieszkańcy i urzędnicy Urzędu Miasta","Tylko czujniki","Programiści i testerzy","Inwestorzy"],a:0,w:"Mieszkańcy miasta oraz urzędnicy odpowiedzialni za ochronę środowiska."},
+ {q:"Problem „nieefektywne kanały komunikacji z mieszkańcami” rozwiązuje:",o:["Gęsta sieć czujników","Aplikacja mobilna z ostrzeżeniami","Aplikacja analityczna","Raport roczny"],a:1,w:"Czujniki → brak informacji; aplikacja mobilna → komunikacja; analityka → badanie zmian."},
+ {q:"Autor pojęcia wiedzy ukrytej (tacit knowledge):",o:["Alan Turing","Michael Polanyi","Ken Schwaber","Winston Royce"],a:1,w:"Michael Polanyi: „możemy wiedzieć więcej, niż możemy powiedzieć”."},
+ {q:"Prawda czy fałsz: osoba z wiedzą ukrytą zawsze jest jej świadoma.",o:["Prawda","Fałsz"],a:1,w:"Często NIE jest jej świadoma, dlatego trzeba ją wydobywać pytaniami otwartymi."},
+ {q:"Które pytanie jest OTWARTE?",o:["Czy dane mają być w tabelce?","W jaki sposób mają być prezentowane dane?","Czy raport ma być w PDF?","Czy użytkownik się loguje?"],a:1,w:"Pytania otwarte: „w jaki sposób…”, „co się dzieje…”, „jak ma działać…”."},
+ {q:"Do czego służą pytania zamknięte?",o:["Do eksploracji przestrzeni rozwiązań","Do doprecyzowania wymagań","Do wydobywania wiedzy ukrytej","Do budowania relacji"],a:1,w:"Otwarte → eksploracja; zamknięte → doprecyzowanie."},
+ {q:"Cel pierwszych rozmów z klientem:",o:["Ustalić wszystkie szczegóły","Eksploracja przestrzeni wymagań i identyfikacja problemów","Podpisać umowę","Zaprojektować bazę danych"],a:1,w:"Szczegóły w kolejnych iteracjach; nie mogą zaburzać rozumienia całości."},
+ {q:"Która technika była wymieniona jako przydatna przy tworzeniu wizji?",o:["Mind mapa","Diagram Gantta","Code review","Load testing"],a:0,w:"Lista funkcji, mind mapa, mapa funkcji, rysunek koncepcyjny."},
+ {q:"Po co klientowi wizja przygotowana przez zespół?",o:["Żeby zobaczył, że go rozumiemy i bardziej zaangażował się w projekt","Żeby mniej zapłacił","Żeby nie musiał rozmawiać","Bez powodu"],a:0,w:"Gdy klient czuje, że go rozumiemy, bardziej wierzy w projekt."},
+ {q:"Kiedy programista staje się klientem?",o:["Nigdy","Gdy zleca oprogramowanie na zewnątrz (outsourcing)","Gdy pisze testy","Gdy robi code review"],a:1,w:"Korzystając z zewnętrznego oprogramowania lub outsourcingu."},
+ {q:"Walidacja wymagań odpowiada na pytanie:",o:["Czy budujemy produkt poprawnie?","Czy budujemy właściwy produkt?","Ile to kosztuje?","Kto to przetestuje?"],a:1,w:"Walidacja = właściwy produkt; weryfikacja = produkt zgodny ze specyfikacją."},
+ {q:"Wymaganie „system odpowiada w mniej niż 2 s” jest:",o:["Funkcjonalne","Niefunkcjonalne"],a:1,w:"Opisuje JAK system działa (wydajność), więc jest niefunkcjonalne."},
+];
+const FL=[
+ ["«include» vs «extend»","include: zawsze (część przypadku). extend: opcjonalnie. Grot extend wskazuje na przypadek nadrzędny."],
+ ["Specyfikacja UC – poziomy","Nieformalna, formalna skrócona, formalna pełna (szablon Cockburna)"],
+ ["Format user story","Jako <rola> chcę <cel>, aby <korzyść>"],
+ ["INVEST","Independent, Negotiable, Valuable, Estimable, Small, Testable"],
+ ["Epik","Duża historia / obszar grupujący wiele user stories"],
+ ["Persona","Fikcyjna postać reprezentująca typ użytkownika (UCD, marketing)"],
+ ["Po co specyfikacja?","Wizja to za mało; szacowanie, weryfikacja, umowa"],
+ ["Iron triangle","Zakres – koszt – czas. Kaskada: stały zakres. Agile: stały czas i koszt."],
+ ["Kaskada – etapy","Planowanie, Analiza, Projektowanie, Implementacja, Testowanie, Wdrożenie, Utrzymanie"],
+ ["Agile","Iteracyjno-ewolucyjny, empiryczny, stałe terminy / zmienny zakres, współpraca, działający soft"],
+ ["Piramida wymagań","Potrzeby → Funkcje → Wymagania"],
+ ["Proces analizy","Wizja → Model funkcjonalny → Procesy i scenariusze → GUI"],
+ ["Wizja","Dziedzina, Problem, Cel, Główne funkcje"],
+ ["Pitch deck","Zespół, problem, korzyści, rozwiązanie, rynek, konkurencja, model biznesowy, budżet"],
+ ["Wiedza ukryta","Polanyi: „wiemy więcej, niż umiemy powiedzieć”; posiadacz często jej nie zna"],
+ ["Pytania otwarte","Eksploracja, wydobywają wiedzę ukrytą: „w jaki sposób…”"],
+ ["Pytania zamknięte","Doprecyzowanie wymagań: tak/nie"],
+ ["Klient z wizją","Ogólne hasła, brak funkcji, brak scenariuszy, tylko pozytywne ścieżki"],
+ ["Aktor","Rola wchodząca w interakcję z systemem (np. mieszkaniec, urzędnik)"],
+];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const $=id=>document.getElementById(id);
+let run=null;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function setMode(id){["m-entry","m-kolos","m-all","m-wrong","m-flash"].forEach(b=>$(b).classList.toggle("primary",b===id))}
+function start(kind){
+  setMode("m-"+kind);
+  let idx=Q.map((_,i)=>i);
+  if(kind==="kolos")idx=idx.filter(i=>Q[i].t==="kolos");
+  if(kind==="wrong"){const w=store.get("iwj-wrong",[]);idx=w.filter(i=>i<Q.length);if(!idx.length){$("stage").innerHTML='<div class="qcard"><p class="qtext">Nie masz zapisanych błędnych odpowiedzi.</p><p>Zrób najpierw wejściówkę albo wszystkie pytania.</p></div>';$("prog").style.width="0";return}}
+  idx=shuffle(idx); if(kind==="entry")idx=idx.slice(0,8);
+  run={kind,idx,pos:0,score:0,answers:[]};show();
+}
+function show(){
+  const i=run.idx[run.pos],it=Q[i];
+  $("prog").style.width=(run.pos/run.idx.length*100)+"%";
+  const keys="abcdefgh";
+  const order=it.t==="kolos"||it.o.length===2?it.o.map((_,k)=>k):shuffle(it.o.map((_,k)=>k));
+  $("stage").innerHTML=`<div class="qcard"><div class="qmeta"><span>Pytanie ${run.pos+1} / ${run.idx.length}${it.t==="kolos"?' · <span class="pill">styl kolosa</span>':''}</span><span>Wynik: ${run.score}</span></div>
+   <p class="qtext">${esc(it.q)}</p><p class="hint" style="text-align:left;margin:-8px 0 12px">zaznacz wszystkie pasujące odpowiedzi</p><div class="opts">${order.map((k,n)=>`<button class="opt" type="button" role="checkbox" aria-checked="false" data-k="${k}"><span class="k">${keys[n]}</span><span>${esc(it.o[k])}</span></button>`).join("")}</div>
+   <div class="qnav" id="chk"><button class="btn primary" id="check" type="button" disabled>Sprawdź</button></div><div id="fb"></div></div>`;
+  const sel=new Set();
+  document.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{const k=+b.dataset.k;sel.has(k)?sel.delete(k):sel.add(k);b.classList.toggle("sel");b.setAttribute("aria-checked",sel.has(k));$("check").disabled=!sel.size}));
+  $("check").addEventListener("click",()=>answer([...sel]));
+}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function ansOf(it){return Array.isArray(it.a)?it.a:[it.a]}
+function answer(k){
+  const i=run.idx[run.pos],it=Q[i],A=ansOf(it),ok=k.length===A.length&&k.every(x=>A.includes(x));
+  if(ok)run.score++; run.answers.push({i,k,ok}); $("chk").remove();
+  document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;b.classList.remove("sel");const kk=+b.dataset.k;if(A.includes(kk))b.classList.add("good");else if(k.includes(kk))b.classList.add("wrong")});
+  let w=store.get("iwj-wrong",[]); w=w.filter(x=>x!==i); if(!ok)w.push(i); store.set("iwj-wrong",w);
+  const last=run.pos===run.idx.length-1;
+  $("fb").innerHTML=`<div class="why"><span class="verdict" style="color:var(${ok?"--ok":"--bad"})">${ok?"Dobrze!":"Źle."}</span> ${it.w}</div><div class="qnav"><button class="btn primary" id="next" type="button">${last?"Pokaż wynik":"Dalej →"}</button></div>`;
+  $("next").focus(); $("next").addEventListener("click",()=>{if(last)finish();else{run.pos++;show()}});
+}
+function finish(){
+  $("prog").style.width="100%";
+  const n=run.idx.length,s=run.score,pct=Math.round(s/n*100);
+  const scaled=run.kind==="entry"?` · na kartkówce ≈ ${s} / 8 pkt`:"";
+  const best=store.get("iwj-best",0); if(pct>best)store.set("iwj-best",pct);
+  const msg=pct>=90?"Wejściówka zdana z zapasem.":pct>=50?"Próg zaliczony, ale przejrzyj błędne.":"Wróć do notatek i spróbuj jeszcze raz.";
+  const wrong=run.answers.filter(a=>!a.ok);
+  $("stage").innerHTML=`<div class="qcard result"><div class="score">${s}/${n}</div><p>${pct}%${scaled}</p><p class="qtext">${msg}</p>
+   <div class="qbar" style="justify-content:center"><button class="btn primary" type="button" id="again">Jeszcze raz</button>${wrong.length?'<button class="btn" type="button" id="rw">Powtórz błędne</button>':""}</div>
+   ${wrong.length?`<div class="review">${wrong.map(a=>`<div class="x"><b>${esc(Q[a.i].q)}</b><br>Twoje: ${a.k.map(x=>esc(Q[a.i].o[x])).join(" | ")}<br>Poprawne: <b>${ansOf(Q[a.i]).map(x=>esc(Q[a.i].o[x])).join(" | ")}</b></div>`).join("")}</div>`:""}</div>`;
+  $("again").addEventListener("click",()=>start(run.kind==="wrong"?"entry":run.kind));
+  if($("rw"))$("rw").addEventListener("click",()=>start("wrong"));
+  showBest();
+}
+let fpos=0,fdeck=[];
+function flash(){
+  setMode("m-flash"); fdeck=shuffle(FL); fpos=0; drawFlash();
+}
+function drawFlash(){
+  const c=fdeck[fpos];$("prog").style.width=((fpos+1)/fdeck.length*100)+"%";
+  $("stage").innerHTML=`<div class="fcard" id="fc" tabindex="0" role="button" aria-label="Odwróć fiszkę"><div class="in"><div class="face front">${c[0]}</div><div class="face back">${c[1]}</div></div></div>
+  <p class="hint">kliknij kartę, żeby ją odwrócić · ${fpos+1}/${fdeck.length}</p>
+  <div class="qbar" style="justify-content:center"><button class="btn" id="fprev" type="button">← Wstecz</button><button class="btn primary" id="fnext" type="button">Dalej →</button></div>`;
+  const fc=$("fc");const tog=()=>fc.classList.toggle("flip");fc.addEventListener("click",tog);fc.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();tog()}});
+  $("fprev").disabled=fpos===0;
+  $("fprev").addEventListener("click",()=>{fpos--;drawFlash()});
+  $("fnext").addEventListener("click",()=>{fpos=(fpos+1)%fdeck.length;drawFlash()});
+}
+function showBest(){const b=store.get("iwj-best",null),w=store.get("iwj-wrong",[]);$("best").textContent=(b!==null?`najlepszy wynik: ${b}%`:"")+(w.length?` · do powtórki: ${w.length}`:"")}
+$("m-entry").addEventListener("click",()=>start("entry"));
+$("m-all").addEventListener("click",()=>start("all"));
+$("m-kolos").addEventListener("click",()=>start("kolos"));
+$("m-wrong").addEventListener("click",()=>start("wrong"));
+$("m-flash").addEventListener("click",flash);
+
+function route(){
+  const h=location.hash.slice(1);
+  const quiz=h==="quiz";
+  $("view-quiz").hidden=!quiz; $("view-notatki").hidden=quiz;
+  $("nav-quiz").toggleAttribute("aria-current",quiz); $("nav-notatki").toggleAttribute("aria-current",!quiz);
+  if(quiz){$("nav-quiz").setAttribute("aria-current","page");if(!run&&!$("stage").innerHTML)start("entry");window.scrollTo(0,0)}
+  else{$("nav-notatki").setAttribute("aria-current","page");if(h&&h!=="notatki"){const el=document.getElementById(h);if(el)el.scrollIntoView()}else window.scrollTo(0,0)}
+}
+(function(){const R=document.documentElement,mq=matchMedia("(prefers-color-scheme: dark)");const cur=()=>R.dataset.theme||(mq.matches?"dark":"light");const apply=t=>{if(t)R.dataset.theme=t;R.classList.toggle("is-dark",cur()==="dark")};apply(store.get("iwj-theme",null));if(mq.addEventListener)mq.addEventListener("change",()=>apply());$("themeBtn").addEventListener("click",()=>{const t=cur()==="dark"?"light":"dark";apply(t);store.set("iwj-theme",t)})})();
+addEventListener("hashchange",route); route(); showBest();
+</script>
